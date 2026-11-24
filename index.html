@@ -1457,7 +1457,11 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
 
       if (header){
         var key = nm.pet + '|' + nm.guardian;
-        var body = txt.split('\n').slice(1).join('\n').replace(/^\s+|\s+$/g, '');
+        var nl = txt.indexOf('\n');
+        var firstLine = nl < 0 ? txt : txt.slice(0, nl);
+        var close = firstLine.lastIndexOf(')');
+        var restFirst = close >= 0 ? firstLine.slice(close + 1).replace(/^[\s,\-–—:·]+/, '') : '';
+        var body = (restFirst ? restFirst + '\n' : '') + txt.split('\n').slice(1).join('\n').replace(/^\s+|^-?\s+|\s+$/g, '');
         var e = byKey[key];
         if (!e){
           e = { pet: nm.pet, guardian: nm.guardian, bodies: [] };
@@ -1888,6 +1892,17 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     };
   }
 
+  /* 코멘트 안의 '보호자: 김민지', '릴리 ( 이원정 님 )' 같은 이름 줄은 본문에서 뺀다 */
+  function stripNameLines(t){
+    return (t || '').split('\n').filter(function(L){
+      var s = L.replace(/\s+$/, '');
+      if (/^\s*(보호자|보호자명|환자|환자명|아이|아이이름|반려동물|반려견|반려묘|이름)\s*(?:이름)?\s*[:：]\s*\S/.test(s)) return false;
+      if (/^\s*[가-힣A-Za-z0-9]{1,12}\s*\(\s*[가-힣]{2,4}\s*님?\s*\)\s*$/.test(s)) return false;
+      if (/^\s*[가-힣]{2,4}\s*보호자(?:님)?\s*$/.test(s)) return false;
+      return true;
+    }).join('\n').replace(/\n{3,}/g, '\n\n').replace(/^\s+|\s+$/g, '');
+  }
+
   function emojiFor(sp, card){
     var s = sp || (card && card.s) || 0;
     return s === 1 ? '🐶' : s === 2 ? '🐱' : '🐾';
@@ -1903,7 +1918,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     }
     current = pick;
 
-    var body = tidyBody(memo);
+    var body = tidyBody(stripNameLines(memo));
     if (body) body = '오늘 진료 결과 안내드립니다.\n' + body;
 
     var nm = resolvedNames();
