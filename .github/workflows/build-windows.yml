@@ -1,0 +1,99 @@
+name: Build Windows EXE (portable)
+
+# 데스크톱 앱(PetmateAftercare-Guide.exe)을 Windows 러너에서 실제로 빌드하고 검증합니다.
+# - main 브랜치(라이브 Pages)는 건드리지 않습니다. desktop-exe 브랜치에서만 돕니다.
+# - 결과물: dist/PetmateAftercare-Guide.exe (Artifacts 에서 내려받기)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - desktop-exe
+    paths:
+      - 'desktop/**'
+      - '.github/workflows/build-windows.yml'
+
+permissions:
+  contents: read
+
+env:
+  CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+  FORCE_COLOR: '0'
+
+jobs:
+  build:
+    name: windows-latest / x64 portable
+    runs-on: windows-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Environment info
+        run: |
+          node --version
+          npm --version
+          python --version
+          Write-Host "runner: $env:RUNNER_OS / $env:RUNNER_ARCH"
+          Write-Host "commit: $env:GITHUB_SHA"
+
+      - name: Install dependencies (desktop)
+        working-directory: desktop
+        run: npm ci --no-audit --no-fund
+
+      - name: Prepare bundled guide (index.html + SheetJS)
+        working-directory: desktop
+        run: python prepare-guide.py
+
+      - name: Build icon (idempotent, keeps committed .ico if Pillow missing)
+        working-directory: desktop
+        continue-on-error: true
+        run: |
+          python -m pip install --quiet pillow
+          python build/make-icon.py
+
+      - name: Build portable exe
+        working-directory: desktop
+        run: npx electron-builder --win portable --x64 --publish never
+
+      - name: Show build output
+        run: |
+          Get-ChildItem desktop/dist | Format-Table Name, Length, LastWriteTime
+
+      - name: Verify exe (PE32+ / x64 / bundled guide)
+        run: pwsh -NoProfile -File desktop/scripts/verify-exe.ps1
+
+      - name: Smoke test (launch app, build a real notice)
+        run: pwsh -NoProfile -File desktop/scripts/smoke-test.ps1
+
+      - name: Collect reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: |
+            desktop/dist/smoke*.json
+            desktop/guide/build-info.json
+            desktop/dist/verify.json
+          if-no-files-found: warn
+
+      - name: Upload exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: PetmateAftercare-Guide-win-x64
+          path: desktop/dist/PetmateAftercare-Guide.exe
+          if-no-files-found: error
+          retention-days: 30

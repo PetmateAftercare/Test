@@ -1,0 +1,8 @@
+# 생성물 · 설치물 제외
+node_modules/
+dist/
+guide/index.html
+guide/build-info.json
+guide/vendor/
+build/icon-preview-256.png
+*.log

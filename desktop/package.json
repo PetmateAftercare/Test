@@ -1,0 +1,59 @@
+{
+  "name": "petmate-aftercare-guide",
+  "productName": "PetmateAftercare-Guide",
+  "version": "1.0.0",
+  "description": "펫메이트 애프터케어 - 보호자 카톡 안내 작성기 (Windows 데스크톱 앱)",
+  "author": "Petmate Aftercare",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "prepare-guide": "python prepare-guide.py",
+    "start": "electron .",
+    "smoke": "electron . --smoke-test --smoke-out=dist/smoke.json",
+    "dist:win": "electron-builder --win portable --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "44.11.5",
+    "electron-builder": "26.18.1"
+  },
+  "build": {
+    "appId": "com.petmate.aftercare.guide",
+    "productName": "PetmateAftercare-Guide",
+    "copyright": "Copyright (c) 2026 Petmate Aftercare",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "guide/**/*"
+    ],
+    "asar": true,
+    "compression": "maximum",
+    "electronLanguages": [
+      "ko",
+      "en-US"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "PetmateAftercare-Guide.exe",
+      "legalTrademarks": "Petmate Aftercare",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "portable": {
+      "artifactName": "PetmateAftercare-Guide.exe",
+      "requestExecutionLevel": "user"
+    }
+  }
+}
