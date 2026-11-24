@@ -1397,6 +1397,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   /* ---------- 카톡 대화 내보내기(.txt) 읽기 ---------- */
   var DATE_RE = /^(?:-{3,}\s*)?(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일\s*[월화수목금토일]?요일?(?:\s*-{3,})?\s*$/;
   var MSG_RE  = /^\[(.+?)\]\s*\[(오전|오후)\s*(\d{1,2}):(\d{2})\]\s?([\s\S]*)$/;
+  var SYS_RE  = /^<?\s*(메시지가 삭제되었습니다|삭제된 메시지입니다|삭제된 메시지)\s*\.?\s*>?$/;
 
   function parseKakao(text){
     var lines = (text || '').split(/\r\n|\r|\n/);
@@ -1417,6 +1418,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
         buf = { d: curDate, sender: mm[1].trim(), time: mm[3] + ':' + mm[4], text: mm[5] };
         continue;
       }
+      if (SYS_RE.test(L.replace(/\s+$/, '').trim())) continue;   /* 카톡 시스템 문구 */
       if (buf) buf.text += '\n' + L;
     }
     if (buf) msgs.push(buf);
