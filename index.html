@@ -346,7 +346,85 @@
   #toast.show{opacity:1;transform:translate(-50%,0)}
   #toast .e{margin-right:6px}
 
+  /* ---------- 1단계 · 우리 병원 이름 ---------- */
+  .hosp{
+    border:1.5px solid #cfe7e3;border-radius:14px;padding:13px 14px;margin-bottom:12px;
+    background:linear-gradient(180deg,#f5fcfa,#ecf8f5);
+  }
+  .hosp-label{
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    font-size:13.2px;font-weight:800;color:var(--mint-d);margin:0 0 7px;line-height:1.4;
+  }
+  .hosp-label .opt{font-weight:600;color:var(--muted);font-size:11px}
+  .hosp input[type=text]{
+    width:100%;font-family:inherit;font-size:14px;font-weight:700;color:var(--ink);
+    background:#fff;border:1.5px solid #d8e7e7;border-radius:11px;padding:10px 12px;outline:none;
+    -webkit-appearance:none;transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .hosp input[type=text]:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(15,157,143,.12)}
+  .hosp input[type=text]::placeholder{color:#a6b8bc;font-weight:500}
+  .hosp-hint{margin:6px 1px 0;font-size:11.4px;color:var(--muted);line-height:1.55}
+  .hosp-hint b{display:inline;font-size:inherit;color:var(--mint-d)}
+  .hosp-note{
+    margin:7px 1px 0;padding:7px 9px;border-radius:9px;
+    background:#f1faf8;border:1px solid #d9ece8;
+    font-size:11.3px;font-weight:700;color:var(--mint-d);line-height:1.55;
+  }
+
+  /* ---------- 경고 배너 (JSON 파일 등) ---------- */
+  .warnbox{
+    display:flex;gap:9px;align-items:flex-start;margin:0 0 8px;
+    background:#fff6e8;border:1.5px solid #f0d6a8;border-radius:12px;
+    padding:10px 11px;font-size:12.4px;line-height:1.58;color:#7a5a16;
+  }
+  .warnbox .wic{flex:0 0 auto;font-size:15px;line-height:1.35}
+  .warnbox .wtxt{flex:1;min-width:0;font-weight:600}
+  .warnbox .wx{
+    flex:0 0 auto;width:24px;height:24px;border-radius:50%;border:1px solid #e8d2a8;
+    background:#fff;color:#a8813a;font-size:12px;line-height:1;cursor:pointer;font-family:inherit;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .warnbox .wx:active{transform:translateY(1px)}
+
+  /* ---------- 1단계 ① · 내 병원 엑셀 ---------- */
+  .xlsxrow{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:9px}
+  .xlsxbtn{
+    display:inline-flex;align-items:center;gap:6px;
+    background:#fff;border:1.5px solid #cfe7e3;color:var(--mint-d);
+    font-family:inherit;font-size:12.4px;font-weight:800;padding:8px 12px;border-radius:10px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .xlsxbtn:active{transform:translateY(1px)}
+  .xlsxbtn[disabled]{opacity:.55;cursor:default}
+  .xlsxbtn .opt{font-weight:600;color:var(--muted);font-size:11px;margin-left:2px}
+  .xlsxstatus{margin-top:7px;font-size:11.4px;color:var(--muted);line-height:1.55}
+  .xlsxstatus b{display:inline;font-size:inherit;color:var(--mint-d)}
+
+  /* ===================== 프라이버시 배지 ===================== */
+  .privacy{
+    display:flex;align-items:flex-start;gap:11px;flex-wrap:wrap;
+    margin-top:12px;padding:13px 14px 12px 15px;border-radius:14px;
+    background:#fff;border:1px solid #d7ebe7;border-left:4px solid var(--mint);
+    box-shadow:0 1px 2px rgba(16,45,52,.04);
+    font-size:12.4px;line-height:1.55;color:#2f4b52;
+  }
+  .privacy .pico{flex:0 0 auto;font-size:16px;line-height:1.25}
+  .privacy .ptxt{flex:1;min-width:180px}
+  .privacy .ptitle{display:block;font-size:13px;font-weight:800;color:var(--mint-d);letter-spacing:-.2px;line-height:1.45}
+  .privacy b{display:inline;font-size:inherit;color:var(--mint-d);font-weight:800}
+  .privacy .psub{display:block;margin-top:3px;font-size:11.6px;color:#4b6068;font-weight:600;line-height:1.55}
+  .privacy .prule{display:block;margin-top:6px;padding-top:6px;border-top:1px dashed #e2ebee;font-size:11.1px;color:var(--muted);font-weight:500;line-height:1.6}
+  .wipe{
+    flex:0 0 auto;margin-left:auto;background:#fff5f4;border:1px solid #f0cdc9;color:#a4402f;
+    font-family:inherit;font-size:11.4px;font-weight:800;padding:7px 11px;border-radius:10px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .wipe:active{transform:translateY(1px)}
+
   @media (max-width:430px){
+    .privacy{padding:12px 12px 11px 13px}
+    .privacy .ptitle{font-size:12.4px}
+    .wipe{margin-left:0;width:100%;text-align:center;padding:9px 11px}
     .wrap{padding:14px 12px 44px}
     h1 .brk{display:block}
     h1 .sep{display:none}
@@ -365,7 +443,7 @@
   }
   @media print{
     body{background:#fff}
-    .mk-go,.pv-copy,.ai-copy,.linkbtn,#toast{display:none}
+    .mk-go,.pv-copy,.ai-copy,.linkbtn,#toast,.wipe,.xlsxrow{display:none}
     .step{break-inside:avoid;box-shadow:none}
   }
 </style>
@@ -384,22 +462,45 @@
     </div>
   </header>
 
+  <div class="privacy">
+    <div class="ptxt" id="confidBox">
+      <strong class="ptitle" id="confidTitle">🔒 우리 병원 내부 전용 · 자료 외부 유출 금지</strong>
+      <span class="psub">🔒 서버 전송 없음 · 우리 병원 기기 안에서만 처리돼요. 코멘트·차트·올린 파일 내용은 저장되지 않고 창을 닫으면 바로 사라집니다. 이 기기에 저장되는 건 병원 이름과 우리 병원 엑셀 카드 목록뿐이에요.</span>
+      <span class="prule">이 페이지의 진료 코멘트·차트·보호자 안내는 해당 병원 내부 업무 전용입니다. 화면 캡처, 개인 메신저/SNS 전송, 파일 무단 반출 등 외부 유출을 금지합니다. (입력 내용은 서버로 전송되지 않으며 창을 닫으면 사라집니다.)</span>
+    </div>
+    <button type="button" class="wipe" id="wipeBtn">🗑️ 이 기기 저장 정보 모두 지우기</button>
+  </div>
+
   <!-- STEP 1 -->
   <section class="step">
     <div class="step-head">
       <div class="num">1</div>
       <div>
         <h2>준비 자료 2가지</h2>
-        <span class="hint">이 두 가지만 있으면 됩니다. 30초면 모입니다.</span>
+        <span class="hint">병원 이름만 적고, 이 두 가지만 있으면 됩니다. 30초면 모입니다.</span>
       </div>
     </div>
     <div class="step-body">
+      <div class="hosp">
+        <label class="hosp-label" for="hospitalName">🏥 우리 병원 이름 <span class="opt">여기만 바꾸면 병원별 완성</span></label>
+        <input type="text" id="hospitalName" maxlength="40" autocomplete="off" spellcheck="false"
+               placeholder="예: 굿모닝펫동물병원" aria-describedby="hospitalHint">
+        <p class="hosp-hint" id="hospitalHint">적은 이름이 <b>2단계 완성 문구</b>와 <b>3단계 예시</b> 첫 줄에 그대로 들어갑니다. 한 번 입력하면 이 브라우저에 이 병원 이름으로 저장되고, <b>병원 이름을 바꾸면 입력한 코멘트·파일·결과는 즉시 비워집니다</b>(다른 병원 자료가 섞이지 않도록).</p>
+        <p class="hosp-note" id="hospNote" hidden></p>
+      </div>
       <div class="mat">
         <div class="tag">①</div>
         <div class="txt">
           <b>Petmate Aftercare 전체 콘텐츠 엑셀</b>
           <p>펫메이트에 로그인한 뒤 <code class="k">m.pet-mate.net/my-cardnews</code> 에서 <b style="display:inline;font-size:inherit">[엑셀 다운로드]</b> 버튼을 누르면 내려받아집니다. 구독 중인 펫카드 목록과 링크가 모두 들어 있어요.</p>
           <a class="linkbtn" href="https://m.pet-mate.net/my-cardnews" target="_blank" rel="noopener">펫메이트 열기 · 엑셀 다운로드 →</a>
+
+          <div class="xlsxrow">
+            <button type="button" class="xlsxbtn" id="xlsxBtn">📊 내 병원 엑셀(.xlsx) 올리기 <span class="opt">(선택)</span></button>
+            <button type="button" class="reset" id="xlsxReset" hidden>기본 목록으로</button>
+          </div>
+          <div class="xlsxstatus" id="xlsxStatus"></div>
+          <input type="file" id="xlsxInput" accept=".xlsx,.xls,.csv" hidden>
         </div>
       </div>
       <div class="mat">
@@ -414,7 +515,13 @@
               <span class="cnt" id="commentCount">0자</span>
             </div>
 
-            <textarea id="commentInput" rows="3" aria-label="원장님 진료 코멘트 메모"
+            <div class="warnbox" id="jsonWarn" role="alert" hidden>
+              <span class="wic">⚠️</span>
+              <span class="wtxt">이 파일은 진료 코멘트가 아니라 시스템 데이터(JSON) 파일이에요. 카톡 대화 내보내기(.txt)나 진료 코멘트를 올려 주세요.</span>
+              <button type="button" class="wx" id="jsonWarnClose" aria-label="안내 닫기">✕</button>
+            </div>
+
+            <textarea id="commentInput" rows="3" aria-label="원장님 진료 코멘트 메모" autocomplete="off" spellcheck="false"
               placeholder="예: 누아 구토로 내원, 엑스레이 결과 이상 없음, 소화제 처방"></textarea>
 
             <div class="memo-foot">
@@ -502,7 +609,7 @@
       <div class="chatwrap">
         <div class="chathead"><span>보호자에게 보낼 문구</span><span class="ok">예시</span></div>
 <div class="bubble">안녕하세요, 홍길동 보호자님 🐶
-굿모닝펫동물병원입니다.
+<span id="exHosp">굿모닝펫동물병원입니다.</span>
 
 오늘 콩이 흉부 X-ray 검사 결과, 심장 크기를 보는 방사선 지표(VHS 10.3 · VLAS 2.0)가 모두 정상 범위로 확인되었습니다.
 
@@ -1325,6 +1432,135 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   var entryList = document.getElementById('entryList');
   var toast     = document.getElementById('toast');
 
+  /* ---------- 저장소 도우미 (사생활 보호 모드 · file:// 에서도 안전) ---------- */
+  var HOSP_KEY      = 'petmate_hospital';        /* 이 기기에 마지막으로 쓴 병원 이름 */
+  var CARDS_KEY_PFX = 'petmate_cards::';         /* 병원 이름별로 분리 저장 (petmate_cards::<병원명>) */
+  var activeHospital = '';                       /* 지금 화면에 열려 있는 병원 */
+
+  function lsGet(k){
+    try { return window.localStorage.getItem(k); } catch(e){ return null; }
+  }
+  function lsSet(k, v){
+    try { window.localStorage.setItem(k, v); return true; } catch(e){ return false; }
+  }
+  function lsDel(k){
+    try { window.localStorage.removeItem(k); } catch(e){}
+  }
+  /* 병원별 저장 키 — 병원 이름이 다르면 다른 칸에 저장된다 */
+  function cardsKeyFor(name){
+    var n = cleanHospital(name);
+    return n ? CARDS_KEY_PFX + n : '';
+  }
+
+  /* ===================== ① 우리 병원 이름 (병원별 설정) ===================== */
+  var hospInput = document.getElementById('hospitalName');
+  var exHospEl  = document.getElementById('exHosp');
+  var confidEl  = document.getElementById('confidTitle');
+
+  function cleanHospital(s){
+    return (s || '')
+      .replace(/\u00a0/g, ' ')
+      .replace(/\s+/g, ' ')
+      .replace(/^[\s"'“”‘’\[\]]+|[\s"'“”‘’\[\]]+$/g, '')
+      .replace(/\s*(입니다|이에요|예요)\.?$/, '')
+      .trim();
+  }
+  /* 입력된 병원 이름 (없으면 빈 문자열) */
+  function hospitalName(){
+    if (hospInput && typeof hospInput.value === 'string' && cleanHospital(hospInput.value)) {
+      return cleanHospital(hospInput.value);
+    }
+    return cleanHospital(lsGet(HOSP_KEY) || '');
+  }
+  /* 문구 첫 줄에 들어갈 병원 소개 한 줄 */
+  function hospitalLine(){
+    var n = hospitalName();
+    return (n ? n : '동물병원') + '입니다.';
+  }
+  function syncHospital(){
+    var n = hospitalName();
+    if (exHospEl) exHospEl.textContent = (n ? n : '동물병원') + '입니다.';
+    if (confidEl) confidEl.textContent = '🔒 ' + (n ? n : '우리 병원') + ' 내부 전용 · 자료 외부 유출 금지';
+    if (made) renderResult();
+  }
+
+  /* 병원이 바뀌면 이 병원 것만 남긴다 — 코멘트·파일·결과는 메모리에만 있고 즉시 버린다 */
+  function resetWorkspace(){
+    ta.value = '';
+    srcNames = { pet: '', guardian: '' };
+    entries = [];
+    made = false;
+    manualCard = null;
+    lastMsg = '';
+    hideJsonWarn();
+    clearFile();
+    entryBox.hidden = true;
+    if (picker) picker.hidden = true;
+    if (swapBtn) swapBtn.textContent = '다른 카드로 바꾸기 ▾';
+    if (result) result.hidden = true;
+    if (pvEmpty) pvEmpty.hidden = false;
+    if (pvText) pvText.innerHTML = '';
+    if (whoami){ whoami.textContent = ''; whoami.hidden = true; }
+    if (pvNote){ pvNote.textContent = ''; pvNote.hidden = true; }
+    if (badge) badge.textContent = '0자 / 300자 미만';
+    if (matchTag) matchTag.textContent = '🔗 자동으로 고른 펫메이트 카드';
+    if (copyMsg){
+      copyMsg.textContent = '📋 문구 복사하기';
+      copyMsg.classList.remove('done');
+    }
+    syncState();
+  }
+
+  function onHospitalChanged(){
+    var now = hospitalName();
+    if (cleanHospital(activeHospital) !== now){
+      activeHospital = now;
+      var hn = document.getElementById('hospNote');
+      if (hn) hn.hidden = true;             /* 이름을 바꾸면 안내는 사라진다 */
+      resetWorkspace();                     /* 타 병원 코멘트·파일·결과 즉시 삭제 */
+      loadCardsFor(now);                    /* 이 병원 칸에 저장된 카드만 읽어 온다 */
+    }
+    syncHospital();
+  }
+
+  /* ===================== ② 시스템 데이터(JSON) 차단 ===================== */
+  var jsonWarn      = document.getElementById('jsonWarn');
+  var jsonWarnClose = document.getElementById('jsonWarnClose');
+
+  var JSON_KEY_RE = /"(updatedAt|schemaVersion|coverage|cases|cats|cards|version)"\s*:/;
+
+  /* 카톡 코멘트가 아니라 펫메이트 같은 시스템이 내보낸 JSON 데이터인지 */
+  function looksLikeSystemJson(text){
+    var t = (text || '').replace(/^\uFEFF/, '').replace(/^\s+/, '');
+    if (!t) return false;
+    if (t.charAt(0) !== '{' && t.charAt(0) !== '[') return false;
+    if (JSON_KEY_RE.test(t)) return true;
+    try {
+      var v = JSON.parse(t);
+      return !!v && typeof v === 'object';
+    } catch(e){ return false; }
+  }
+  function showJsonWarn(){
+    if (jsonWarn){
+      jsonWarn.hidden = false;
+      if (jsonWarn.scrollIntoView) jsonWarn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    showToast('진료 코멘트가 아니라 시스템 데이터(JSON) 파일이에요. 카톡 대화 내보내기(.txt)나 진료 코멘트를 올려 주세요.', '⚠️');
+  }
+  function hideJsonWarn(){ if (jsonWarn) jsonWarn.hidden = true; }
+  if (jsonWarnClose) jsonWarnClose.addEventListener('click', hideJsonWarn);
+
+  /* 메모장에 JSON이 들어오면 안내하고 비운다 */
+  function guardMemo(){
+    if (!looksLikeSystemJson(ta.value)) return false;
+    ta.value = '';
+    made = false;
+    srcNames = { pet: '', guardian: '' };
+    showJsonWarn();
+    syncState();
+    return true;
+  }
+
   var tTimer   = null;
   var srcNames = { pet: '', guardian: '' };   /* 파일에서 읽은 이름 */
   var entries  = [];                          /* 파일에서 뽑은 진료 코멘트 */
@@ -1508,6 +1744,11 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   function setFile(file){
     if (!file) return;
     var nm = (file.name || '').toLowerCase();
+    if (/\.(json|jsonl|js|xml|html?)$/.test(nm) || /json/.test(file.type || '')){
+      clearFile();
+      showJsonWarn();
+      return;
+    }
     if (!/\.(txt|csv|md|text|log|tsv)$/.test(nm) && !/^text\//.test(file.type || '')){
       showToast('텍스트 파일(.txt · .csv · .md)만 올릴 수 있어요.', '⚠️');
       return;
@@ -1523,8 +1764,20 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   }
 
   function onLoaded(file, text){
+    /* 펫메이트 시스템 데이터(JSON)를 코멘트로 착각해 넣지 않도록 먼저 걸러낸다 */
+    if (looksLikeSystemJson(text)){
+      clearFile();
+      ta.value = '';
+      srcNames = { pet: '', guardian: '' };
+      made = false;
+      syncState();
+      showJsonWarn();
+      return;
+    }
+    hideJsonWarn();
+
     fileName.textContent = file.name || '텍스트 파일';
-    fileMeta.textContent = humanSize(file.size) + ' · 브라우저에서만 읽어요 (서버 전송 없음)';
+    fileMeta.textContent = humanSize(file.size) + ' · 브라우저 메모리에서만 읽어요 (저장·전송 없음)';
     fileCard.hidden = false;
     fileDrop.hidden = true;
 
@@ -1665,6 +1918,290 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     CARDS.push(c); byUrl[c.u] = c;
   });
   var FALLBACK_URL = 'https://m.pet-mate.net/aa2h7yi3';
+  var DEFAULT_CARDS = CARDS.slice();          /* 기본 내장 목록 (복원용) */
+
+  /* ===================== ③ 내 병원 엑셀(.xlsx) 카드 목록 ===================== */
+  var xlsxBtn    = document.getElementById('xlsxBtn');
+  var xlsxInput  = document.getElementById('xlsxInput');
+  var xlsxReset  = document.getElementById('xlsxReset');
+  var xlsxStatus = document.getElementById('xlsxStatus');
+  var SHEETJS_SRC = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.full.min.js';
+  var customCards = null;                     /* 내 병원 엑셀에서 읽은 카드 */
+  var customName  = '';
+
+  function cardUrl(code){ return 'https://m.pet-mate.net/' + code; }
+  function cardCode(u){
+    return String(u || '').replace(/^https?:\/\/[^\/]+\//, '').replace(/[?#].*$/, '').replace(/\/+$/, '');
+  }
+  function cardToRow(c){ return [c.t, c.g, c.s, cardCode(c.u)]; }
+  function rowToCard(r){
+    if (!r || r.length < 1) return null;
+    var t = String(r[0] == null ? '' : r[0]).replace(/\s+/g, ' ').trim();
+    var code = cardCode(r[3]);
+    if (!t || !code || !/^[A-Za-z0-9_-]{4,}$/.test(code)) return null;
+    return { t: t, g: String(r[1] == null ? '' : r[1]).replace(/\s+/g, ' ').trim(), s: toSpecies(r[2]), u: cardUrl(code) };
+  }
+  function toSpecies(v){
+    var n = parseInt(v, 10);
+    if (n === 1 || n === 2) return n;
+    var s = String(v == null ? '' : v);
+    var dog = /강아지|반려견|멍|dog/i.test(s);
+    var cat = /고양이|반려묘|냥|묘|cat/i.test(s);
+    if (dog && cat) return 0;          /* 「강아지 + 고양이」는 공통 */
+    if (cat) return 2;
+    if (dog) return 1;
+    return 0;
+  }
+  function setCards(list){
+    if (!list || !list.length) return;
+    CARDS.length = 0;
+    byUrl = {};
+    list.forEach(function(c){ CARDS.push(c); byUrl[c.u] = c; });
+  }
+
+  /* 여러 시트에서 카드 목록 찾기 (제목·해시태그·대상·링크 열 인식) */
+  function cardsFromRows(rows){
+    var out = [], map = null, start = 0, i, j;
+    for (i = 0; i < Math.min(rows.length, 25); i++){
+      var hr = (rows[i] || []).map(function(x){ return String(x == null ? '' : x).replace(/\s+/g, '').toLowerCase(); });
+      var m = {}, hits = 0;
+      for (j = 0; j < hr.length; j++){
+        var h = hr[j];
+        if (!h) continue;
+        if (m.t == null && /제목|타이틀|title|카드명|콘텐츠명|컨텐츠명/.test(h)) { m.t = j; hits++; }
+        else if (m.g == null && /태그|해시|hash|키워드|keyword|증상|질환/.test(h)) { m.g = j; hits++; }
+        else if (m.s == null && /대상|구분|종류|species|target|반려동물|동물구분/.test(h)) { m.s = j; hits++; }
+        else if (m.u == null && /링크|url|주소|코드|code|link/.test(h)) { m.u = j; hits++; }
+      }
+      if (m.t != null && m.u != null && hits >= 3){ map = m; start = i + 1; break; }
+    }
+    if (!map){ map = { t: 0, g: 1, s: 2, u: 3 }; start = 0; }   /* 머리글 없으면 기본 4열 */
+
+    /* 「대상」 열 이름이 달라도(예: 카테고리 1) 값이 강아지·고양이인 열을 찾아 쓴다 */
+    if (map.s == null){
+      var spCount = {}, spBest = -1, spCnt = 0;
+      rows.slice(start, start + 40).forEach(function(r){
+        if (!r) return;
+        for (var k = 0; k < r.length; k++){
+          var v = String(r[k] == null ? '' : r[k]).replace(/\s+/g, '');
+          if (/^(강아지|고양이|강아지\+고양이|공통|반려견|반려묘)$/.test(v)){
+            spCount[k] = (spCount[k] || 0) + 1;
+            if (spCount[k] > spCnt){ spCnt = spCount[k]; spBest = k; }
+          }
+        }
+      });
+      if (spBest >= 0 && spCnt >= 3) map.s = spBest;
+    }
+
+    rows.slice(start).forEach(function(r){
+      if (!r) return;
+      var c = rowToCard([r[map.t], map.g == null ? '' : r[map.g], map.s == null ? '' : r[map.s], r[map.u]]);
+      if (c) out.push(c);
+    });
+    if (!out.length) out = guessCards(rows);   /* 머리글·열 순서가 다른 파일은 한 번 더 추정 */
+    return out;
+  }
+
+  /* 머리글이 없거나 열 순서가 다른 엑셀: 링크처럼 보이는 열을 먼저 찾아 카드로 복원 */
+  function guessCards(rows){
+    var out = [], counts = {}, urlCol = -1, bestCnt = 0, i, j;
+    for (i = 0; i < Math.min(rows.length, 80); i++){
+      var r = rows[i] || [];
+      for (j = 0; j < r.length; j++){
+        var s = String(r[j] == null ? '' : r[j]).trim();
+        if (!s) continue;
+        if (/pet-mate\.net\/[A-Za-z0-9_-]{4,}/.test(s) || /^[A-Za-z0-9_-]{6,12}$/.test(s)){
+          counts[j] = (counts[j] || 0) + 1;
+          if (counts[j] > bestCnt){ bestCnt = counts[j]; urlCol = j; }
+        }
+      }
+    }
+    if (urlCol < 0 || bestCnt < 3) return out;
+
+    rows.forEach(function(r){
+      if (!r) return;
+      var code = cardCode(r[urlCol]);
+      if (!/^[A-Za-z0-9_-]{4,}$/.test(code)) return;
+      var t = '', g = '', sp = 0, k, v, tags = '';
+      for (k = 0; k < r.length; k++){
+        if (k === urlCol) continue;
+        v = String(r[k] == null ? '' : r[k]).trim();
+        if (!v) continue;
+        if (!sp && v.length <= 6 && /강아지|고양이|공통|반려견|반려묘/.test(v)){ sp = toSpecies(v); continue; }
+        if (/^[\d\s.,%:-]+$/.test(v)) continue;                 /* 숫자·수치 열 */
+        if ((v.match(/[,·]/g) || []).length >= 2){                 /* 해시태그 열 */
+          if (v.length >= tags.length) tags = v;
+          continue;
+        }
+        if (v.length > t.length) t = v;
+      }
+      g = tags;
+      if (!t && tags){ t = tags; g = ''; }
+      if (!t) return;
+      out.push({ t: t, g: g, s: sp, u: cardUrl(code) });
+    });
+    return out;
+  }
+  function cardsFromWorkbook(wb){
+    var out = [], seen = {};
+    var names = (wb && wb.SheetNames) || [];
+    names.forEach(function(n){
+      var ws = wb.Sheets && wb.Sheets[n];
+      if (!ws) return;
+      var rows;
+      try { rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', blankrows: false }); }
+      catch(e){ return; }
+      if (!rows || !rows.length) return;
+      cardsFromRows(rows).forEach(function(c){
+        if (seen[c.u]) return;
+        seen[c.u] = 1; out.push(c);
+      });
+    });
+    return out;
+  }
+
+  function loadSheetJS(cb){
+    if (typeof XLSX !== 'undefined' && XLSX) { cb(true); return; }
+    if (!document.createElement || !document.head) { cb(false); return; }
+    var done = false, s;
+    try {
+      s = document.createElement('script');
+      s.src = SHEETJS_SRC;
+      s.async = true;
+      s.onload = function(){ if (done) return; done = true; cb(typeof XLSX !== 'undefined' && !!XLSX); };
+      s.onerror = function(){ if (done) return; done = true; cb(false); };
+      document.head.appendChild(s);
+    } catch(e){ cb(false); return; }
+    setTimeout(function(){
+      if (done) return; done = true;
+      cb(typeof XLSX !== 'undefined' && !!XLSX);
+    }, 9000);
+  }
+
+  function renderXlsxStatus(mode){
+    if (!xlsxStatus) return;
+    if (customCards && customCards.length){
+      var n = customCards.length;
+      var nm = esc(customName || '내 병원 엑셀');
+      if (mode === 'memory'){
+        var why = cardsKeyFor(hospitalName())
+          ? '저장 공간이 부족해 이번 화면에서만 적용됐어요(창을 닫으면 사라집니다).'
+          : '저장은 안 됐어요. 「🏥 우리 병원 이름」을 먼저 적으면 다음에도 이 병원 카드로 불러옵니다.';
+        xlsxStatus.innerHTML = '📊 <b>' + nm + '</b> · 카드 <b>' + n + '</b>개 적용 중 — ' + why;
+      } else {
+        xlsxStatus.innerHTML = '📊 <b>' + nm + '</b> · 카드 <b>' + n + '</b>개 — 「' + esc(hospitalName()) + '」 칸에만 저장됐어요(서버 전송 없음).';
+      }
+      if (xlsxReset) xlsxReset.hidden = false;
+    } else {
+      xlsxStatus.innerHTML = '기본 내장 카드 <b>' + CARDS.length + '</b>개로 동작해요. 내 병원 엑셀을 올리면 이 병원 구독 카드로 바뀝니다(서버 전송 없음).';
+      if (xlsxReset) xlsxReset.hidden = true;
+    }
+  }
+
+  /* 병원 이름별 저장분을 읽어 온다 — 다른 병원 카드는 절대 불러오지 않는다 */
+  function readCards(name){
+    var key = cardsKeyFor(name);
+    if (!key) return null;
+    var raw = lsGet(key);
+    if (!raw) return null;
+    try {
+      var o = JSON.parse(raw);
+      var rows = (o && o.rows) || [];
+      var list = [];
+      rows.forEach(function(r){ var c = rowToCard(r); if (c) list.push(c); });
+      if (!list.length) return null;
+      return { list: list, name: (o && o.name) || '' };
+    } catch(e){ return null; }
+  }
+
+  function loadCardsFor(name){
+    var got = readCards(name);
+    if (got){
+      customCards = got.list;
+      customName  = got.name;
+      setCards(got.list);
+      renderXlsxStatus('saved');
+    } else {
+      customCards = null;
+      customName  = '';
+      setCards(DEFAULT_CARDS);
+      renderXlsxStatus('default');
+    }
+    if (picker && !picker.hidden) renderPicker();
+  }
+
+  function applyCustomCards(list, fname){
+    if (!list || !list.length) return;
+    customCards = list;
+    customName = fname || '';
+    setCards(list);
+    manualCard = null;
+    var key = cardsKeyFor(hospitalName());
+    var saved = false;
+    if (key) saved = lsSet(key, JSON.stringify({ name: customName, at: Date.now(), rows: list.map(cardToRow) }));
+    renderXlsxStatus(saved ? 'saved' : 'memory');
+    if (made) renderResult();
+    if (picker && !picker.hidden) renderPicker();
+    if (saved) showToast('내 병원 카드 ' + list.length + '개를 적용했어요. 이 병원 이름 칸에만 저장됩니다.', '📊');
+    else if (key) showToast('내 병원 카드 ' + list.length + '개를 화면에만 적용했어요. 이 브라우저의 저장 공간이 부족합니다.', '📊');
+    else showToast('내 병원 카드 ' + list.length + '개를 적용했어요. 병원 이름을 적으면 다음에도 그대로 쓸 수 있어요.', '📊');
+  }
+
+  function handleXlsx(file){
+    if (!file) return;
+    var nm = (file.name || '').toLowerCase();
+    if (!/\.(xlsx|xls|csv)$/.test(nm)){
+      showToast('엑셀 파일(.xlsx · .xls · .csv)만 올릴 수 있어요.', '⚠️');
+      return;
+    }
+    if (file.size > 30 * 1024 * 1024){ showToast('30MB 이하 파일을 올려 주세요.', '⚠️'); return; }
+    if (xlsxBtn) xlsxBtn.disabled = true;
+    showToast('엑셀을 읽는 중이에요…', '📊');
+    loadSheetJS(function(ok){
+      if (!ok){
+        if (xlsxBtn) xlsxBtn.disabled = false;
+        showToast('엑셀 기능을 불러오지 못했어요(인터넷 연결 확인). 지금도 기본 카드 ' + CARDS.length + '개로 그대로 쓰실 수 있어요.', '⚠️');
+        return;
+      }
+      var fr = new FileReader();
+      fr.onload = function(){
+        var list = [];
+        try {
+          var wb = XLSX.read(new Uint8Array(fr.result), { type: 'array' });
+          list = cardsFromWorkbook(wb);
+        } catch(err){ list = []; }
+        if (xlsxBtn) xlsxBtn.disabled = false;
+        if (!list.length){
+          showToast('엑셀에서 펫카드 목록을 찾지 못했어요. 펫메이트 [엑셀 다운로드] 파일인지 확인해 주세요.', '⚠️');
+          return;
+        }
+        applyCustomCards(list, file.name || '');
+      };
+      fr.onerror = function(){
+        if (xlsxBtn) xlsxBtn.disabled = false;
+        showToast('파일을 읽지 못했어요. 다시 시도해 주세요.', '⚠️');
+      };
+      fr.readAsArrayBuffer(file);
+    });
+  }
+
+  if (xlsxBtn) xlsxBtn.addEventListener('click', function(){ if (xlsxInput) xlsxInput.click(); });
+  if (xlsxInput) xlsxInput.addEventListener('change', function(){
+    var f = xlsxInput.files && xlsxInput.files[0];
+    handleXlsx(f);
+    xlsxInput.value = '';
+  });
+  if (xlsxReset) xlsxReset.addEventListener('click', function(){
+    var key = cardsKeyFor(hospitalName());
+    if (key) lsDel(key);
+    customCards = null; customName = '';
+    setCards(DEFAULT_CARDS);
+    manualCard = null;
+    renderXlsxStatus('default');
+    if (made) renderResult();
+    if (picker && !picker.hidden) renderPicker();
+    showToast('이 병원 칸에 저장된 엑셀 카드를 지우고 기본 목록으로 되돌렸어요.', '↩️');
+  });
 
   var TOPICS = [
     ['pancreas',   ['췌장'], ['췌장'], []],
@@ -1818,7 +2355,8 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   function charLen(s){ return Array.from(s).length; }
 
   function compose(o){
-    var head = '안녕하세요, ' + (o.name ? o.name + ' 보호자님 ' : '보호자님 ') + o.emoji + '\n굿모닝펫동물병원입니다.';
+    var head = '안녕하세요, ' + (o.name ? o.name + ' 보호자님 ' : '보호자님 ') + o.emoji + '\n' +
+               (o.hospital || hospitalLine());
     var linkLine = '💛 ' + (o.pet ? o.pet + '에게 ' : '') + '도움이 되는 건강 정보도 함께 보내드려요 👇';
     var tail = linkLine + '\n' + o.url;
     var closing = '궁금하신 점은 언제든 편하게 연락 주세요.';
@@ -1926,7 +2464,8 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
       name: nm.guardian,
       pet: nm.pet,
       url: pick.card.u,
-      emoji: emojiFor(pick.sp, pick.card)
+      emoji: emojiFor(pick.sp, pick.card),
+      hospital: hospitalLine()
     });
     lastMsg = out.msg;
 
@@ -1947,6 +2486,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
 
     var notes = [];
     if (out.trimmed) notes.push('300자 미만에 맞추려고 뒤쪽 문장을 자동으로 줄였어요.');
+    if (!hospitalName()) notes.push('1단계 맨 위 「🏥 우리 병원 이름」에 병원 이름을 적으면 문구 첫 줄이 「해피동물병원입니다.」처럼 나갑니다.');
     pvNote.hidden = !notes.length;
     pvNote.textContent = notes.join(' ');
 
@@ -2022,6 +2562,14 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   /* ---- 만들기 ---- */
   makeBtn.addEventListener('click', function(){
     var memo = memoText();
+    if (looksLikeSystemJson(memo)){
+      ta.value = '';
+      made = false;
+      srcNames = { pet: '', guardian: '' };
+      syncState();
+      showJsonWarn();
+      return;
+    }
     if (!memo){
       showToast('1단계 ②에 진료 코멘트를 적거나 텍스트 파일을 올려 주세요.', '✍️');
       ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2037,8 +2585,21 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   });
 
   /* ---- 입력 변화 ---- */
-  ta.addEventListener('input', syncState);
+  ta.addEventListener('input', function(){
+    if (guardMemo()) return;
+    hideJsonWarn();
+    syncState();
+  });
   ta.addEventListener('change', syncState);
+  ta.addEventListener('paste', function(e){
+    var dt = e.clipboardData || window.clipboardData;
+    var txt = '';
+    try { txt = dt && dt.getData ? dt.getData('text') : (dt && dt.text) || ''; } catch(err){ txt = ''; }
+    if (txt && looksLikeSystemJson(txt)){
+      if (e.preventDefault) e.preventDefault();
+      showJsonWarn();
+    }
+  });
   resetBtn.addEventListener('click', function(){
     ta.value = '';
     srcNames = { pet: '', guardian: '' };
@@ -2091,6 +2652,71 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
       showToast('자동 복사가 막혔어요. 위 문구를 길게 눌러 복사해 주세요.', '⚠️');
     });
   });
+
+  /* ===================== 부팅 · 이 기기 저장 정보 삭제 ===================== */
+  function wipeSavedData(){
+    var keys = [];
+    try {
+      var n = window.localStorage.length;
+      for (var i = 0; i < n; i++){
+        var k = window.localStorage.key(i);
+        if (!k) continue;
+        if (k === HOSP_KEY || k.indexOf(CARDS_KEY_PFX) === 0) keys.push(k);
+      }
+    } catch(e){}
+    keys.forEach(lsDel);
+    lsDel(HOSP_KEY);
+  }
+
+  function bootHospital(){
+    var savedHosp = cleanHospital(lsGet(HOSP_KEY) || '');
+    var restored = false;
+    if (savedHosp && hospInput && !cleanHospital(hospInput.value)){ hospInput.value = savedHosp; restored = true; }
+    activeHospital = hospitalName();
+    loadCardsFor(activeHospital);
+    syncHospital();
+
+    var hospNote = document.getElementById('hospNote');
+    if (hospNote && restored){
+      hospNote.hidden = false;
+      hospNote.textContent = '🔒 이 기기에 저장돼 있던 「' + savedHosp + '」 이름과 카드 목록을 불러왔어요. ' +
+                             '다른 병원에서 같이 쓰는 기기라면 이름을 바꾸거나 위의 🗑️ 버튼으로 지워 주세요.';
+    }
+
+    if (hospInput){
+      var onChange = function(){
+        var v = cleanHospital(hospInput.value);
+        if (v) lsSet(HOSP_KEY, v); else lsDel(HOSP_KEY);
+        onHospitalChanged();
+      };
+      hospInput.addEventListener('input', onChange);
+      hospInput.addEventListener('change', onChange);
+    }
+
+    var wipeBtn = document.getElementById('wipeBtn');
+    if (wipeBtn) wipeBtn.addEventListener('click', function(){
+      var go = true;
+      try {
+        if (typeof window.confirm === 'function'){
+          go = window.confirm('이 기기에 저장된 병원 이름과 엑셀 카드 목록을 모두 지웁니다.\n입력한 코멘트·차트·파일은 원래 저장되지 않으며 함께 비워집니다. 계속할까요?');
+        }
+      } catch(e){ go = true; }
+      if (!go) return;
+      wipeSavedData();
+      if (hospInput) hospInput.value = '';
+      var hn2 = document.getElementById('hospNote');
+      if (hn2) hn2.hidden = true;
+      activeHospital = '';
+      customCards = null; customName = '';
+      setCards(DEFAULT_CARDS);
+      resetWorkspace();
+      renderXlsxStatus('default');
+      syncHospital();
+      showToast('이 기기에 저장된 병원 이름·카드 목록을 모두 지웠어요. 입력한 코멘트와 파일도 비웠습니다.', '🗑️');
+    });
+  }
+
+  bootHospital();
 
   syncState();
 })();
