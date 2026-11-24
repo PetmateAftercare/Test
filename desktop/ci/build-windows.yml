@@ -3,6 +3,9 @@ name: Build Windows EXE (portable)
 # 데스크톱 앱(PetmateAftercare-Guide.exe)을 Windows 러너에서 실제로 빌드하고 검증합니다.
 # - main 브랜치(라이브 Pages)는 건드리지 않습니다. desktop-exe 브랜치에서만 돕니다.
 # - 결과물: dist/PetmateAftercare-Guide.exe (Artifacts 에서 내려받기)
+#
+# 사용법: 이 파일을 `.github/workflows/build-windows.yml` 로 복사한 뒤 커밋/푸시하세요.
+#   (Pickle 의 GitHub 연결 토큰에는 `workflows` 권한이 없어 이 위치에 둡니다.)
 
 on:
   workflow_dispatch:

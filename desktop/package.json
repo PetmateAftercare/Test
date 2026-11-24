@@ -32,7 +32,7 @@
       "guide/**/*"
     ],
     "asar": true,
-    "compression": "maximum",
+    "compression": "normal",
     "electronLanguages": [
       "ko",
       "en-US"

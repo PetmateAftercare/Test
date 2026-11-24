@@ -24,23 +24,32 @@
 
 ## 빌드
 
-GitHub Actions (권장) — `.github/workflows/build-windows.yml`, `windows-latest`:
+방법 A — Windows 러너(GitHub Actions): `desktop/ci/build-windows.yml` 을
+`.github/workflows/` 로 복사하고 `windows-latest` 에서 실행합니다.
+(Pickle 의 GitHub 연결 토큰에는 `workflows` 권한이 없어 워크플로 파일은 이 위치에 두었습니다.)
 
+```bash
+cp desktop/ci/build-windows.yml .github/workflows/build-windows.yml
+git push        # windows-latest 러너가 빌드 → PE 검증 → 스모크 테스트 → Artifact 업로드
 ```
-gh workflow run build-windows.yml --ref desktop-exe -R PetmateAftercare/Test
-gh run watch -R PetmateAftercare/Test
-gh run download <run-id> -n PetmateAftercare-Guide-win-x64 -R PetmateAftercare/Test
-```
 
-로컬(Windows)에서:
+방법 B — Linux 에서 크로스빌드 (wine 불필요, 이 저장소의 실제 배포본을 만든 방법):
 
-```powershell
+```bash
 cd desktop
 python prepare-guide.py
-npm ci
+export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+npm ci --no-audit --no-fund
 npx electron-builder --win portable --x64 --publish never
-# 결과: desktop/dist/PetmateAftercare-Guide.exe
 ```
+
+- 저메모리 환경에서는 payload 7z 압축(`-mx=9`)이 실패할 수 있습니다. 그때는 `TMPDIR` 을
+  큰 디스크로 지정하고, 압축 레벨을 낮추거나 `--prepackaged dist/win-unpacked` 로 두 단계로
+  나누어 빌드하면 됩니다. (`TMPDIR` 기본값이 작은 tmpfs 면 `ENOSPC` 가 납니다.)
+- 방법 B 산출물도 **PE32+ x86-64 앱 본체**를 담은 NSIS 셸프추출 실행 파일입니다.
+  겉포장은 NSIS 표준인 32비트 스텁(PE32, i386)이고 안의 앱은 x64 이므로, 64비트
+  Windows 10/11 에서 그대로 실행됩니다.
+- 방법 C — Windows PC 에서: `npm ci` 후 `npx electron-builder --win portable --x64`.
 
 ## 검증 (CI 에서 자동)
 
