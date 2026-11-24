@@ -199,7 +199,13 @@
   .thumbdel:active{transform:translateY(1px)}
 
   /* ---------- step 2 · 만들기 ---------- */
-  .names{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .names{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px}
+  .names label{display:block;min-width:0}
+  .names label span{
+    display:block;font-size:10.8px;font-weight:800;color:var(--mint-d);
+    letter-spacing:-.1px;margin:0 0 3px 3px;
+  }
+  .names label span i{font-style:normal;font-weight:600;color:#a7bcbf}
   .names input{
     width:100%;font-family:inherit;font-size:13px;color:var(--ink);
     background:#fff;border:1px solid #dbe9e9;border-radius:11px;padding:9px 11px;
@@ -471,8 +477,14 @@
     <div class="step-body">
 
       <div class="names">
-        <input type="text" id="guardianName" placeholder="보호자 성함 (선택)" autocomplete="off">
-        <input type="text" id="petName" placeholder="반려동물 이름 (선택)" autocomplete="off">
+        <label>
+          <span>보호자 성함 <i>선택</i></span>
+          <input type="text" id="guardianName" placeholder="예) 김민지" autocomplete="off">
+        </label>
+        <label>
+          <span>반려동물 이름 <i>선택</i></span>
+          <input type="text" id="petName" placeholder="예) 누아" autocomplete="off">
+        </label>
       </div>
 
       <button type="button" class="mk-go" id="makeBtn">✨ 보호자 발송용 문구 만들기</button>
