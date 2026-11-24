@@ -1,0 +1,35 @@
+{
+  "id": "/Test/",
+  "name": "Petmate Aftercare - 보호자 카톡 안내 작성기",
+  "short_name": "Petmate 안내",
+  "description": "펫메이트 엑셀과 원장님 코멘트만 있으면 300자 미만 보호자 카톡 안내문이 1분 만에 완성됩니다.",
+  "lang": "ko",
+  "dir": "ltr",
+  "start_url": "/Test/",
+  "scope": "/Test/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f0f7f6",
+  "theme_color": "#0f9d8f",
+  "categories": ["medical", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

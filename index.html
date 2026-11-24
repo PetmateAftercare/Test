@@ -23,6 +23,17 @@
 <meta name="twitter:description" content="펫메이트 엑셀 + 원장님 코멘트만 있으면 300자 미만 보호자 안내문 완성.">
 <meta name="twitter:image" content="https://petmateaftercare.github.io/Test/og-card.png">
 
+<!-- 웹앱(PWA): 홈 화면에 추가 / Chrome·Edge "앱으로 설치" -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f9d8f">
+<meta name="application-name" content="Petmate 안내">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Petmate 안내">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+
 <style>
   :root{
     --ink:#1b2a2f;
@@ -2720,6 +2731,14 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
 
   syncState();
 })();
+</script>
+<script>
+  /* 서비스 워커 등록 (홈 화면 앱 설치·오프라인 지원). 실패해도 가이드 동작에는 영향 없음. */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js').catch(function () {});
+    });
+  }
 </script>
 </body>
 </html>
