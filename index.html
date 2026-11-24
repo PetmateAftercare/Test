@@ -141,6 +141,71 @@
   }
   .linkbtn:active{transform:translateY(1px)}
 
+  /* ---------- step 1-② 메모 · 캡처 ---------- */
+  [hidden]{display:none!important}
+  .memo{margin-top:12px}
+  .memo-label{
+    display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+    font-size:12.4px;font-weight:700;color:var(--mint-d);margin-bottom:7px;line-height:1.45;
+  }
+  .memo-label .cnt{margin-left:auto;font-weight:600;color:var(--muted);font-size:11.5px}
+  textarea#commentInput{
+    width:100%;display:block;resize:vertical;min-height:78px;
+    font-family:inherit;font-size:13.5px;line-height:1.62;color:var(--ink);
+    background:#fff;border:1.5px solid #d8e7e7;border-radius:12px;
+    padding:11px 12px;outline:none;-webkit-appearance:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  textarea#commentInput:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(15,157,143,.12)}
+  textarea#commentInput::placeholder{color:#a6b8bc}
+  .memo-foot{display:flex;align-items:center;gap:8px;margin-top:7px;min-height:24px}
+  .reset{
+    margin-left:auto;background:#fff;border:1px solid var(--line);color:var(--muted);
+    font-family:inherit;font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .reset:active{transform:translateY(1px)}
+  .drop{
+    margin-top:6px;display:flex;align-items:center;gap:10px;
+    border:1.5px dashed #c9dedb;border-radius:12px;background:#f7fcfb;
+    padding:11px 12px;cursor:pointer;color:var(--muted);font-size:12.2px;line-height:1.5;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .drop:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+  .drop.over{border-color:var(--mint);background:var(--mint-l)}
+  .drop .ic{flex:0 0 auto;font-size:19px;line-height:1}
+  .drop b{display:block;color:var(--ink-soft);font-size:13px;margin-bottom:2px}
+  .thumbcard{
+    margin-top:6px;display:flex;gap:11px;align-items:center;
+    border:1px solid #cfe6e2;background:#f2fbf9;border-radius:12px;padding:9px 10px;
+  }
+  .thumbcard img{
+    flex:0 0 auto;width:62px;height:62px;object-fit:cover;border-radius:9px;
+    border:1px solid #dcebe9;background:#fff;
+  }
+  .thumbmeta{flex:1;min-width:0}
+  .thumbmeta .nm{
+    display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .thumbmeta .sm{display:block;font-size:11.2px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .thumbdel{
+    flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);
+    background:#fff;color:#8a9ba1;font-size:13px;line-height:1;cursor:pointer;font-family:inherit;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .thumbdel:active{transform:translateY(1px)}
+
+  /* ---------- step 2 merge note ---------- */
+  .merge-note{
+    display:flex;align-items:center;gap:8px;margin:0 0 12px;
+    background:var(--mint-l);border:1px solid #cfeae5;border-radius:11px;
+    padding:9px 11px;font-size:12.3px;font-weight:700;color:var(--mint-d);line-height:1.45;
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .merge-note .d{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:currentColor}
+  .merge-note.on{background:#eaf9ef;border-color:#c4e8d3;color:#1c7a45}
+
   /* ---------- prompt box ---------- */
   .prompt-top{
     display:flex;align-items:center;justify-content:space-between;gap:10px;
@@ -279,6 +344,38 @@
         <div class="txt">
           <b>원장님 진료 코멘트</b>
           <p>원내 카톡방에 올라온 <b style="display:inline;font-size:inherit">캡처 이미지</b> 그대로, 또는 <b style="display:inline;font-size:inherit">텍스트 메모</b> 그대로 쓰면 됩니다. 다듬지 않아도 AI가 보호자용 문장으로 바꿔 줍니다.</p>
+
+          <div class="memo">
+            <div class="memo-label">
+              <span>👇 여기에 그대로 적어 두면 <b>2단계 지시문에 자동으로 합쳐집니다</b></span>
+              <span class="cnt" id="commentCount">0자</span>
+            </div>
+
+            <textarea id="commentInput" rows="3" aria-label="원장님 진료 코멘트 메모"
+              placeholder="예) 콩이 흉부 X-ray 결과 심장 크기 정상(VHS 10.3 · VLAS 2.0), 6개월 뒤 정기 검진 권장. 밤 기침 있으면 내원."></textarea>
+
+            <div class="memo-foot">
+              <button type="button" class="reset" id="commentReset" hidden>초기화</button>
+            </div>
+
+            <div class="drop" id="imgDrop" role="button" tabindex="0" aria-label="캡처 이미지 첨부">
+              <span class="ic">📷</span>
+              <span>
+                <b>캡처 이미지 첨부</b>
+                눌러서 고르기 · 끌어다 놓기 · <b style="display:inline;font-size:inherit">Ctrl+V</b> 붙여넣기
+              </span>
+            </div>
+            <input type="file" id="imgInput" accept="image/*" hidden>
+
+            <div class="thumbcard" id="thumbCard" hidden>
+              <img id="thumbImg" alt="첨부한 캡처 이미지 미리보기">
+              <div class="thumbmeta">
+                <span class="nm" id="thumbName"></span>
+                <span class="sm" id="thumbSize"></span>
+              </div>
+              <button type="button" class="thumbdel" id="thumbDel" aria-label="첨부한 이미지 삭제">✕</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -294,6 +391,8 @@
       </div>
     </div>
     <div class="step-body">
+
+      <div class="merge-note" id="mergeNote"><span class="d"></span><span id="mergeNoteText">1단계 ②에 적은 메모·캡처가 아래 지시문 마지막 줄에 바로 합쳐집니다.</span></div>
 
       <div class="copybar">
         <button class="copy" id="copyBtn" type="button">📋 AI 지시문 복사하기</button>
@@ -314,7 +413,8 @@
 [여기에 원장님 코멘트 또는 캡처 이미지를 올리세요]</pre>
 
       <ul class="mini">
-        <li>원장님 코멘트는 <b>지시문 맨 아래 <code class="k">---</code> 아래</b>에 붙여넣거나, 캡처 이미지를 함께 첨부하세요.</li>
+        <li>1단계 ②에 적은 메모는 <b>지시문 맨 아래 <code class="k">---</code> 다음 줄</b>에 그대로 들어갑니다.</li>
+        <li>캡처 이미지는 AI 채팅창에 <b>따로 첨부</b>해 주세요. 지시문에는 첨부 안내가 함께 들어갑니다.</li>
         <li>답이 300자를 넘으면 <b>“300자 넘었어, 줄여서 다시”</b> 한마디만 하면 됩니다.</li>
       </ul>
     </div>
@@ -373,15 +473,105 @@
   var toast = document.getElementById('toast');
   var timer = null, tTimer = null;
 
+  /* ---------- 1-② 메모 · 캡처 이미지 ---------- */
+  var ta        = document.getElementById('commentInput');
+  var countEl   = document.getElementById('commentCount');
+  var resetBtn  = document.getElementById('commentReset');
+  var drop      = document.getElementById('imgDrop');
+  var imgInput  = document.getElementById('imgInput');
+  var thumbCard = document.getElementById('thumbCard');
+  var thumbImg  = document.getElementById('thumbImg');
+  var thumbName = document.getElementById('thumbName');
+  var thumbSize = document.getElementById('thumbSize');
+  var thumbDel  = document.getElementById('thumbDel');
+  var mergeNote = document.getElementById('mergeNote');
+  var mergeText = document.getElementById('mergeNoteText');
+
+  var MARKER = '[여기에 원장님 코멘트 또는 캡처 이미지를 올리세요]';
+  var NOTE_IMG_ONLY = '[첨부한 캡처 이미지를 함께 올려 주세요]';
+  var NOTE_IMG_BOTH = '[첨부한 캡처 이미지도 함께 올려 주세요]';
+  var basePrompt = pre.textContent;
+
+  var imgFile = null, imgURL = null;
+
+  function memoText(){ return ta.value.replace(/^\s+/,'').replace(/\s+$/,''); }
+
+  function renderPrompt(){
+    var memo = memoText();
+    var tail;
+    if (memo && imgFile)      tail = memo + '\n' + NOTE_IMG_BOTH;
+    else if (memo)            tail = memo;
+    else if (imgFile)         tail = NOTE_IMG_ONLY;
+    else                      tail = MARKER;
+    pre.textContent = basePrompt.split(MARKER).join(tail);
+    updateState(memo);
+  }
+
+  function updateState(memo){
+    if (typeof memo !== 'string') memo = memoText();
+    countEl.textContent = (memo ? memo.length : 0) + '자';
+    resetBtn.hidden = !memo;
+    if (memo && imgFile){
+      mergeNote.className = 'merge-note on';
+      mergeText.textContent = '1-② 메모와 캡처가 아래 지시문에 반영되었습니다 ✓';
+    } else if (memo){
+      mergeNote.className = 'merge-note on';
+      mergeText.textContent = '1-②에 적은 메모가 아래 지시문에 그대로 반영되었습니다 ✓';
+    } else if (imgFile){
+      mergeNote.className = 'merge-note on';
+      mergeText.textContent = '1-② 캡처 첨부 안내가 아래 지시문에 반영되었습니다 ✓';
+    } else {
+      mergeNote.className = 'merge-note';
+      mergeText.textContent = '1단계 ②에 적은 메모·캡처가 아래 지시문 마지막 줄에 바로 합쳐집니다.';
+    }
+  }
+
+  function humanSize(b){
+    if (b >= 1024 * 1024) return (b / 1024 / 1024).toFixed(1) + 'MB';
+    return Math.max(1, Math.round(b / 1024)) + 'KB';
+  }
+
+  function setImage(file){
+    if (!file) return;
+    if (!/^image\//.test(file.type || '')){
+      showToast('이미지 파일만 첨부할 수 있어요.', '⚠️');
+      return;
+    }
+    if (file.size > 15 * 1024 * 1024){
+      showToast('15MB 이하 이미지를 올려 주세요.', '⚠️');
+      return;
+    }
+    if (imgURL) URL.revokeObjectURL(imgURL);
+    imgFile = file;
+    imgURL = URL.createObjectURL(file);
+    thumbImg.src = imgURL;
+    thumbImg.alt = '첨부한 캡처 이미지 미리보기 — ' + (file.name || '붙여넣은 캡처');
+    thumbName.textContent = file.name || '붙여넣은 캡처';
+    thumbSize.textContent = humanSize(file.size) + ' · 브라우저에만 보관, 서버 전송 없음';
+    thumbCard.hidden = false;
+    drop.hidden = true;
+    renderPrompt();
+  }
+
+  function clearImage(){
+    if (imgURL){ URL.revokeObjectURL(imgURL); imgURL = null; }
+    imgFile = null;
+    thumbImg.removeAttribute('src');
+    thumbCard.hidden = true;
+    drop.hidden = false;
+    imgInput.value = '';
+    renderPrompt();
+  }
+
   function text(){
     return pre.textContent.replace(/\u00a0/g,'\u0020');
   }
 
-  function showToast(msg){
-    toast.innerHTML = '<span class="e">✅</span>' + msg;
+  function showToast(msg, icon){
+    toast.innerHTML = '<span class="e">' + (icon || '✅') + '</span>' + msg;
     toast.classList.add('show');
     clearTimeout(tTimer);
-    tTimer = setTimeout(function(){ toast.classList.remove('show'); }, 2400);
+    tTimer = setTimeout(function(){ toast.classList.remove('show'); }, 2600);
   }
 
   function legacyCopy(str){
@@ -400,14 +590,18 @@
   }
 
   function done(){
+    var memo = memoText();
     btn.textContent = '✅ 복사 완료!';
     btn.classList.add('done');
-    showToast('복사 완료! AI 채팅창에 붙여넣으세요.');
+    if (memo && imgFile) showToast('복사 완료! AI 채팅창에 붙여넣고 캡처 이미지도 함께 올려 주세요.');
+    else if (imgFile)    showToast('복사 완료! AI 채팅창에 붙여넣고 캡처 이미지도 같이 올려 주세요.');
+    else if (memo)       showToast('복사 완료! AI 채팅창에 붙여넣으세요. 적어 둔 메모도 함께 들어갔어요.');
+    else                 showToast('복사 완료! AI 채팅창에 붙여넣으세요.');
     clearTimeout(timer);
     timer = setTimeout(function(){
       btn.textContent = '📋 AI 지시문 복사하기';
       btn.classList.remove('done');
-    }, 2600);
+    }, 4000);
   }
 
   function fail(){
@@ -429,6 +623,87 @@
       if (legacyCopy(str)) { done(); } else { fail(); }
     }
   });
+
+  /* ---- 메모 입력 ---- */
+  ta.addEventListener('input', renderPrompt);
+  ta.addEventListener('change', renderPrompt);
+
+  resetBtn.addEventListener('click', function(){
+    ta.value = '';
+    renderPrompt();
+    ta.focus();
+  });
+
+  /* ---- 캡처 이미지 첨부 ---- */
+  drop.addEventListener('click', function(){ imgInput.click(); });
+  drop.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+      e.preventDefault();
+      imgInput.click();
+    }
+  });
+  imgInput.addEventListener('change', function(){
+    setImage(imgInput.files && imgInput.files[0]);
+  });
+  thumbDel.addEventListener('click', function(e){
+    e.stopPropagation();
+    clearImage();
+  });
+
+  function stopDrag(e){ e.preventDefault(); e.stopPropagation(); }
+
+  drop.addEventListener('dragenter', function(e){ stopDrag(e); drop.classList.add('over'); });
+  drop.addEventListener('dragover',  function(e){ stopDrag(e); drop.classList.add('over'); });
+  drop.addEventListener('dragleave', function(e){ stopDrag(e); drop.classList.remove('over'); });
+  drop.addEventListener('drop', function(e){
+    stopDrag(e);
+    drop.classList.remove('over');
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) setImage(f);
+  });
+
+  /* 페이지 어디에 이미지를 끌어다 놓아도 첨부 */
+  document.addEventListener('dragover', function(e){
+    var dt = e.dataTransfer;
+    if (!dt) return;
+    var hasFiles = dt.types ? Array.prototype.indexOf.call(dt.types, 'Files') > -1
+                            : !!(dt.files && dt.files.length);
+    if (hasFiles) e.preventDefault();
+  });
+  document.addEventListener('drop', function(e){
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!f || !/^image\//.test(f.type || '')) return;
+    if (e.target === drop || (drop.contains && drop.contains(e.target))) return;
+    e.preventDefault();
+    setImage(f);
+    showToast('이미지를 첨부했어요.', '📷');
+  });
+
+  /* 캡처 이미지 붙여넣기 (Ctrl+V / ⌘V) */
+  document.addEventListener('paste', function(e){
+    var dt = e.clipboardData;
+    if (!dt) return;
+    var file = null, i;
+    var items = dt.items || [];
+    for (i = 0; i < items.length; i++){
+      var it = items[i];
+      if (it.type && it.type.indexOf('image/') === 0){
+        file = it.getAsFile();
+        if (file) break;
+      }
+    }
+    if (!file && dt.files){
+      for (i = 0; i < dt.files.length; i++){
+        if (/^image\//.test(dt.files[i].type || '')){ file = dt.files[i]; break; }
+      }
+    }
+    if (!file) return;
+    e.preventDefault();
+    setImage(file);
+    showToast('클립보드의 캡처를 첨부했어요.', '📷');
+  });
+
+  renderPrompt();
 })();
 </script>
 </body>
