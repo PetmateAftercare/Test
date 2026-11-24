@@ -95,6 +95,7 @@
     font-size:12px;font-weight:700;color:#fff;line-height:1.35;position:relative;z-index:1;
   }
   .flow div span{display:block;font-size:15px;opacity:.85;margin-bottom:2px}
+  .flow div i{display:block;font-style:normal;font-size:10.5px;font-weight:600;opacity:.82;margin-top:2px;letter-spacing:0}
 
   /* ---------- step card ---------- */
   .step{
@@ -206,6 +207,39 @@
   .merge-note .d{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:currentColor}
   .merge-note.on{background:#eaf9ef;border-color:#c4e8d3;color:#1c7a45}
 
+  /* ---------- optional step tag ---------- */
+  .opt{
+    display:inline-block;vertical-align:1px;margin-left:4px;
+    background:#fff;border:1px solid #cfe6e2;color:var(--mint-d);
+    font-size:11px;font-weight:800;letter-spacing:0;padding:1px 7px;border-radius:999px;
+  }
+
+  /* ---------- AI fold (details) ---------- */
+  details.ai-fold{
+    border:1px solid var(--line);border-radius:14px;background:#fbfdfd;overflow:hidden;
+  }
+  details.ai-fold summary{
+    list-style:none;cursor:pointer;display:flex;align-items:center;gap:11px;
+    padding:13px 14px;-webkit-tap-highlight-color:transparent;
+  }
+  details.ai-fold summary::-webkit-details-marker{display:none}
+  details.ai-fold summary:focus-visible{outline:2px solid var(--mint);outline-offset:-2px}
+  details.ai-fold[open] summary{background:#f3fbf9;border-bottom:1px solid var(--line)}
+  .ai-fold .ico{
+    flex:0 0 auto;width:34px;height:34px;border-radius:11px;background:var(--mint-l);
+    display:flex;align-items:center;justify-content:center;font-size:17px;
+  }
+  .ai-fold .sum-txt{flex:1;min-width:0}
+  .ai-fold .sum-txt b{
+    display:block;font-size:13.8px;line-height:1.42;color:var(--ink);letter-spacing:-.25px;
+  }
+  .ai-fold .sum-txt .sub{
+    display:block;font-size:12.2px;font-weight:500;color:var(--muted);margin-top:3px;line-height:1.45;
+  }
+  .ai-fold .chev{flex:0 0 auto;color:var(--mint-d);font-size:12px;transition:transform .18s ease}
+  details.ai-fold[open] .chev{transform:rotate(180deg)}
+  .fold-body{padding:14px 13px 15px}
+
   /* ---------- prompt box ---------- */
   .prompt-top{
     display:flex;align-items:center;justify-content:space-between;gap:10px;
@@ -316,7 +350,7 @@
     <p class="sub">굿모닝펫동물병원 <strong>실전 노하우</strong> — 준비 2가지, 붙여넣기 1번이면 끝납니다.</p>
     <div class="flow">
       <div><span>①</span>자료 2가지 준비</div>
-      <div><span>②</span>AI에 붙여넣기</div>
+      <div><span>②</span>안내문 작성<i>AI는 선택</i></div>
       <div><span>③</span>카톡에 복붙</div>
     </div>
   </header>
@@ -386,11 +420,22 @@
     <div class="step-head">
       <div class="num">2</div>
       <div>
-        <h2>AI(피클 · 클로드 · GPT)에 자료 올리고 지시문 복사하기</h2>
-        <span class="hint">쓰시는 AI 아무거나 괜찮습니다. 파일 2개 올리고 → 아래 버튼 → 붙여넣기.</span>
+        <h2>AI로 안내문 초안 만들기 <span class="opt">선택</span></h2>
+        <span class="hint">AI를 쓰시는 분만 펼쳐 보세요. 안 쓰셔도 3단계 예시처럼 직접 쓰시면 됩니다.</span>
       </div>
     </div>
     <div class="step-body">
+
+      <details class="ai-fold" id="aiFold">
+        <summary>
+          <span class="ico">🤖</span>
+          <span class="sum-txt">
+            <b>AI(피클 · 클로드 · GPT)를 직접 쓰실 때 펼쳐 보기</b>
+            <span class="sub" id="foldSub">AI를 직접 안 쓰시면 이 단계는 건너뛰셔도 됩니다.</span>
+          </span>
+          <span class="chev" aria-hidden="true">▾</span>
+        </summary>
+        <div class="fold-body">
 
       <div class="merge-note" id="mergeNote"><span class="d"></span><span id="mergeNoteText">1단계 ②에 적은 메모·캡처가 아래 지시문 마지막 줄에 바로 합쳐집니다.</span></div>
 
@@ -417,6 +462,9 @@
         <li>캡처 이미지는 AI 채팅창에 <b>따로 첨부</b>해 주세요. 지시문에는 첨부 안내가 함께 들어갑니다.</li>
         <li>답이 300자를 넘으면 <b>“300자 넘었어, 줄여서 다시”</b> 한마디만 하면 됩니다.</li>
       </ul>
+
+        </div>
+      </details>
     </div>
   </section>
 
@@ -426,7 +474,7 @@
       <div class="num">3</div>
       <div>
         <h2>완성된 문구 복붙해서 보호자 카톡으로 발송</h2>
-        <span class="hint">AI가 준 문구를 그대로 복사해 보호자님 카톡방에 붙여넣습니다.</span>
+        <span class="hint">AI가 준 문구(또는 직접 쓰신 문구)를 그대로 복사해 보호자님 카톡방에 붙여넣습니다.</span>
       </div>
     </div>
     <div class="step-body">
@@ -486,6 +534,8 @@
   var thumbDel  = document.getElementById('thumbDel');
   var mergeNote = document.getElementById('mergeNote');
   var mergeText = document.getElementById('mergeNoteText');
+  var foldSub   = document.getElementById('foldSub');
+  var FOLD_SUB_IDLE = 'AI를 직접 안 쓰시면 이 단계는 건너뛰셔도 됩니다.';
 
   var MARKER = '[여기에 원장님 코멘트 또는 캡처 이미지를 올리세요]';
   var NOTE_IMG_ONLY = '[첨부한 캡처 이미지를 함께 올려 주세요]';
@@ -514,15 +564,19 @@
     if (memo && imgFile){
       mergeNote.className = 'merge-note on';
       mergeText.textContent = '1-② 메모와 캡처가 아래 지시문에 반영되었습니다 ✓';
+      if (foldSub) foldSub.textContent = '1-② 메모와 캡처가 지시문에 들어 있습니다 · 눌러서 복사';
     } else if (memo){
       mergeNote.className = 'merge-note on';
       mergeText.textContent = '1-②에 적은 메모가 아래 지시문에 그대로 반영되었습니다 ✓';
+      if (foldSub) foldSub.textContent = '1-②에 적은 메모가 지시문에 들어 있습니다 · 눌러서 복사';
     } else if (imgFile){
       mergeNote.className = 'merge-note on';
       mergeText.textContent = '1-② 캡처 첨부 안내가 아래 지시문에 반영되었습니다 ✓';
+      if (foldSub) foldSub.textContent = '1-② 캡처 첨부 안내가 지시문에 들어 있습니다 · 눌러서 복사';
     } else {
       mergeNote.className = 'merge-note';
       mergeText.textContent = '1단계 ②에 적은 메모·캡처가 아래 지시문 마지막 줄에 바로 합쳐집니다.';
+      if (foldSub) foldSub.textContent = FOLD_SUB_IDLE;
     }
   }
 
