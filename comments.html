@@ -431,7 +431,7 @@
     toast.innerHTML = '<span class="e">✅</span>' + msg;
     toast.classList.add('show');
     clearTimeout(tTimer);
-    tTimer = setTimeout(function(){ toast.classList.remove('show'); }, 2400);
+    tTimer = setTimeout(function(){ toast.classList.remove('show'); }, 2800);
   }
 
   function legacyCopy(str){
@@ -466,7 +466,7 @@
     btn._t = setTimeout(function(){
       btn.innerHTML = btn.getAttribute('data-html');
       btn.classList.remove('done');
-    }, 2200);
+    }, 4000);
   }
 
   function markFail(btn){
