@@ -142,7 +142,7 @@
   }
   .linkbtn:active{transform:translateY(1px)}
 
-  /* ---------- step 1-② 메모 · 캡처 ---------- */
+  /* ---------- step 1-② 메모 · 텍스트 파일 ---------- */
   .memo{margin-top:13px}
   .memo-label{
     display:flex;align-items:center;gap:7px;flex-wrap:wrap;
@@ -177,43 +177,38 @@
   .drop.over{border-color:var(--mint);background:var(--mint-l)}
   .drop .ic{flex:0 0 auto;font-size:19px;line-height:1}
   .drop b{display:block;color:var(--ink-soft);font-size:13px;margin-bottom:2px}
-  .thumbcard{
-    margin-top:6px;display:flex;gap:11px;align-items:center;
+  .filecard{
+    margin-top:6px;display:flex;gap:10px;align-items:center;
     border:1px solid #cfe6e2;background:#f2fbf9;border-radius:12px;padding:9px 10px;
   }
-  .thumbcard img{
-    flex:0 0 auto;width:62px;height:62px;object-fit:cover;border-radius:9px;
-    border:1px solid #dcebe9;background:#fff;
-  }
-  .thumbmeta{flex:1;min-width:0}
-  .thumbmeta .nm{
+  .filecard .fic{flex:0 0 auto;font-size:18px;line-height:1}
+  .filemeta{flex:1;min-width:0}
+  .filemeta .fname{
     display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
-  .thumbmeta .sm{display:block;font-size:11.2px;color:var(--muted);margin-top:3px;line-height:1.45}
-  .thumbdel{
+  .filemeta .fsize{display:block;font-size:11.2px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .filedel{
     flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);
     background:#fff;color:#8a9ba1;font-size:13px;line-height:1;cursor:pointer;font-family:inherit;
     -webkit-tap-highlight-color:transparent;
   }
-  .thumbdel:active{transform:translateY(1px)}
+  .filedel:active{transform:translateY(1px)}
+  .entrybox{margin-top:10px}
+  .entryhead{font-size:11.8px;font-weight:800;color:var(--mint-d);line-height:1.5;margin-bottom:7px}
+  .entrylist{display:flex;flex-wrap:wrap;gap:6px}
+  .echip{
+    display:inline-flex;align-items:baseline;gap:4px;
+    background:#fff;border:1px solid #d3e8e4;color:var(--ink-soft);
+    font-family:inherit;font-size:12.9px;font-weight:800;padding:7px 12px;border-radius:999px;
+    cursor:pointer;-webkit-tap-highlight-color:transparent;line-height:1.3;
+  }
+  .echip .eg{font-weight:600;color:var(--muted);font-size:11.6px}
+  .echip:active{transform:translateY(1px)}
+  .echip.on{background:var(--mint-d);border-color:var(--mint-d);color:#fff}
+  .echip.on .eg{color:#d6f1ec}
 
   /* ---------- step 2 · 만들기 ---------- */
-  .names{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px}
-  .names label{display:block;min-width:0}
-  .names label span{
-    display:block;font-size:10.8px;font-weight:800;color:var(--mint-d);
-    letter-spacing:-.1px;margin:0 0 3px 3px;
-  }
-  .names label span i{font-style:normal;font-weight:600;color:#a7bcbf}
-  .names input{
-    width:100%;font-family:inherit;font-size:13px;color:var(--ink);
-    background:#fff;border:1px solid #dbe9e9;border-radius:11px;padding:9px 11px;
-    outline:none;-webkit-appearance:none;transition:border-color .15s ease, box-shadow .15s ease;
-  }
-  .names input:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(15,157,143,.1)}
-  .names input::placeholder{color:#b3c4c7;font-size:12.4px}
-
   .mk-go{
     width:100%;border:0;cursor:pointer;font-family:inherit;
     background:linear-gradient(180deg,#12b3a2,#0d9488);color:#fff;
@@ -286,27 +281,12 @@
   .pv-copy:active{transform:translateY(1px)}
   .pv-copy.done{background:linear-gradient(180deg,#3fbf8f,#1f9d6b);box-shadow:0 5px 14px rgba(31,157,107,.26)}
 
-  /* 이미지만 첨부했을 때 안내 */
-  .notice{
-    margin-top:12px;background:#fff8e8;border:1px solid #f0dcb4;border-radius:13px;
-    padding:13px 13px 12px;font-size:12.9px;color:#6b5527;line-height:1.62;
+  /* 결과 상단 · 누구 이름으로 만든 문구인지 */
+  .whoami{
+    margin:0 2px 10px;font-size:11.8px;font-weight:800;color:var(--mint-d);line-height:1.5;
+    background:#f1faf8;border:1px solid #d9ece8;border-radius:9px;padding:7px 10px;
   }
-  .notice .nh{display:flex;gap:8px;align-items:flex-start;font-weight:800;color:#7a5c17;font-size:13.2px;line-height:1.5}
-  .notice .nh .ic{flex:0 0 auto;font-size:15px;line-height:1.4}
-  .notice p{margin:7px 0 0}
-  .notice ol{margin:7px 0 0;padding-left:0;list-style:none}
-  .notice ol li{margin:5px 0}
-  .notice b{color:#7a5c17}
-  .ai-copy{
-    width:100%;margin-top:10px;background:#fff;border:1.5px dashed #d9b96f;color:#8a6510;
-    font-family:inherit;font-size:13.4px;font-weight:800;letter-spacing:-.2px;
-    padding:11px 12px;border-radius:11px;cursor:pointer;-webkit-tap-highlight-color:transparent;
-  }
-  .ai-copy:active{transform:translateY(1px)}
-  .ai-copy.done{background:#fdf3df;border-style:solid;border-color:#c9a352;color:#6f4f06}
-  .aipeek{margin-top:9px}
-  .aipeek summary{font-size:12px;font-weight:700;color:#8a6510;cursor:pointer}
-  .aipeek pre.prompt{font-size:11.5px;margin-top:7px}
+  .whoami.miss{background:#f8fafb;border-color:#e6eef0;color:var(--muted);font-weight:600}
 
   /* ---------- prompt box ---------- */
   .prompt-top{
@@ -379,7 +359,6 @@
     .flow div{font-size:11px;padding:8px 5px}
     .mk-go{font-size:15.4px;padding:15px 14px}
     .pv-copy{font-size:14.8px;padding:13px}
-    .names{grid-template-columns:1fr}
   }
   @media (prefers-reduced-motion:reduce){
     *{transition:none!important}
@@ -400,7 +379,7 @@
     <p class="sub">굿모닝펫동물병원 <strong>실전 노하우</strong> — 코멘트만 있으면 안내문이 바로 완성됩니다.</p>
     <div class="flow">
       <div><span>①</span>자료 2가지 준비</div>
-      <div><span>②</span>코멘트·캡처 입력</div>
+      <div><span>②</span>코멘트 입력</div>
       <div><span>③</span>문구 복사 → 카톡</div>
     </div>
   </header>
@@ -427,11 +406,11 @@
         <div class="tag">②</div>
         <div class="txt">
           <b>원장님 진료 코멘트</b>
-          <p>원내 카톡방에 올라온 <b style="display:inline;font-size:inherit">캡처 이미지</b> 그대로, 또는 <b style="display:inline;font-size:inherit">텍스트 메모</b> 그대로 쓰면 됩니다. 다듬지 않아도 2단계에서 보호자용 문구가 됩니다.</p>
+          <p><b style="display:inline;font-size:inherit">텍스트로 적거나</b>, 카톡방 코멘트를 <b style="display:inline;font-size:inherit">텍스트 파일(.txt 등)로 올리면</b> 아이 이름·보호자 이름까지 자동으로 읽어 옵니다. 다듬지 않아도 2단계에서 보호자용 문구가 됩니다.</p>
 
           <div class="memo">
             <div class="memo-label">
-              <span>👇 여기에 그대로 적어 주세요</span>
+              <span>👇 코멘트를 그대로 적거나, 텍스트 파일을 올려 주세요</span>
               <span class="cnt" id="commentCount">0자</span>
             </div>
 
@@ -442,22 +421,27 @@
               <button type="button" class="reset" id="commentReset" hidden>초기화</button>
             </div>
 
-            <div class="drop" id="imgDrop" role="button" tabindex="0" aria-label="캡처 이미지 첨부">
-              <span class="ic">📷</span>
+            <div class="drop" id="fileDrop" role="button" tabindex="0" aria-label="텍스트 파일 올리기">
+              <span class="ic">📄</span>
               <span>
-                <b>캡처 이미지 첨부</b>
-                눌러서 고르기 · 끌어다 놓기 · <b style="display:inline;font-size:inherit">Ctrl+V</b> 붙여넣기
+                <b>텍스트 파일 올리기 (.txt · .csv · .md)</b>
+                눌러서 고르기 · 끌어다 놓기 · 카톡 대화 내보내기 파일도 그대로 OK
               </span>
             </div>
-            <input type="file" id="imgInput" accept="image/*" hidden>
+            <input type="file" id="fileInput" accept=".txt,.csv,.md,.text,.log,text/plain,text/csv,text/markdown" hidden>
 
-            <div class="thumbcard" id="thumbCard" hidden>
-              <img id="thumbImg" alt="첨부한 캡처 이미지 미리보기">
-              <div class="thumbmeta">
-                <span class="nm" id="thumbName"></span>
-                <span class="sm" id="thumbSize"></span>
+            <div class="filecard" id="fileCard" hidden>
+              <span class="fic">📄</span>
+              <div class="filemeta">
+                <span class="fname" id="fileName"></span>
+                <span class="fsize" id="fileMeta"></span>
               </div>
-              <button type="button" class="thumbdel" id="thumbDel" aria-label="첨부한 이미지 삭제">✕</button>
+              <button type="button" class="filedel" id="fileDel" aria-label="올린 파일 지우기">✕</button>
+            </div>
+
+            <div class="entrybox" id="entryBox" hidden>
+              <div class="entryhead" id="entryHead"></div>
+              <div class="entrylist" id="entryList"></div>
             </div>
           </div>
         </div>
@@ -471,43 +455,18 @@
       <div class="num">2</div>
       <div>
         <h2>보호자 발송용 문구 만들기</h2>
-        <span class="hint">1단계 ②에 적은 코멘트로 바로 완성됩니다.</span>
+        <span class="hint">1단계 ②의 코멘트로 바로 완성됩니다. 아이·보호자 이름도 자동으로 들어가요.</span>
       </div>
     </div>
     <div class="step-body">
 
-      <div class="names">
-        <label>
-          <span>보호자 성함 <i>선택</i></span>
-          <input type="text" id="guardianName" placeholder="예) 김민지" autocomplete="off">
-        </label>
-        <label>
-          <span>반려동물 이름 <i>선택</i></span>
-          <input type="text" id="petName" placeholder="예) 누아" autocomplete="off">
-        </label>
-      </div>
-
       <button type="button" class="mk-go" id="makeBtn">✨ 보호자 발송용 문구 만들기</button>
 
-      <div class="pv-empty" id="pvEmpty">1단계 ②에 코멘트를 적고 위 버튼을 누르면<br>완성된 문구가 여기에 나타납니다.</div>
-
-      <!-- 캡처 이미지만 있고 텍스트가 없을 때 -->
-      <div class="notice" id="imgNotice" hidden>
-        <div class="nh"><span class="ic">📷</span><span>캡처 이미지는 아직 문구로 바꿀 수 없어요</span></div>
-        <p>이 페이지는 브라우저에서만 도는 정적 페이지라, <b>이미지 속 글자를 직접 읽지 못합니다.</b> 둘 중 하나면 됩니다.</p>
-        <ol>
-          <li><b>① 위 텍스트 칸에 한 줄만</b> 적고 다시 버튼을 눌러 주세요.<br><span style="color:#8a7344">예: 누아 구토로 내원, 엑스레이 이상 없음, 소화제 처방</span></li>
-          <li><b>② 아래 버튼으로 AI 지시문을 복사</b>해 피클 · 클로드 · GPT에 <b>이미지와 함께</b> 붙여넣으면 AI가 읽고 만들어 줍니다.</li>
-        </ol>
-        <button type="button" class="ai-copy" id="copyAi">📋 AI 지시문 복사하기 (이미지 첨부용)</button>
-        <details class="aipeek">
-          <summary>지시문 미리보기</summary>
-          <pre class="prompt" id="aiPrompt"></pre>
-        </details>
-      </div>
+      <div class="pv-empty" id="pvEmpty">1단계 ②에 코멘트를 적거나 텍스트 파일을 올린 뒤<br>위 버튼을 누르면 완성된 문구가 여기에 나타납니다.</div>
 
       <!-- 결과 -->
       <div class="result" id="result" hidden>
+        <div class="whoami" id="whoami" hidden></div>
         <div class="pv-head">
           <span>보호자에게 보낼 문구</span>
           <span class="cnt-badge" id="charBadge">0자 / 300자 미만</span>
@@ -1351,21 +1310,24 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
 (function(){
   'use strict';
 
-  /* ===================== 1단계 ② 메모 · 캡처 ===================== */
-  var ta       = document.getElementById('commentInput');
-  var countEl  = document.getElementById('commentCount');
-  var resetBtn = document.getElementById('commentReset');
-  var drop     = document.getElementById('imgDrop');
-  var imgInput = document.getElementById('imgInput');
-  var thumbCard= document.getElementById('thumbCard');
-  var thumbImg = document.getElementById('thumbImg');
-  var thumbName= document.getElementById('thumbName');
-  var thumbSize= document.getElementById('thumbSize');
-  var thumbDel = document.getElementById('thumbDel');
-  var toast    = document.getElementById('toast');
+  /* ===================== 1단계 ② 메모 · 텍스트 파일 ===================== */
+  var ta        = document.getElementById('commentInput');
+  var countEl   = document.getElementById('commentCount');
+  var resetBtn  = document.getElementById('commentReset');
+  var fileDrop  = document.getElementById('fileDrop');
+  var fileInput = document.getElementById('fileInput');
+  var fileCard  = document.getElementById('fileCard');
+  var fileName  = document.getElementById('fileName');
+  var fileMeta  = document.getElementById('fileMeta');
+  var fileDel   = document.getElementById('fileDel');
+  var entryBox  = document.getElementById('entryBox');
+  var entryHead = document.getElementById('entryHead');
+  var entryList = document.getElementById('entryList');
+  var toast     = document.getElementById('toast');
 
-  var imgFile = null, imgURL = null;
-  var tTimer = null;
+  var tTimer   = null;
+  var srcNames = { pet: '', guardian: '' };   /* 파일에서 읽은 이름 */
+  var entries  = [];                          /* 파일에서 뽑은 진료 코멘트 */
 
   function memoText(){ return ta.value.replace(/^\s+/, '').replace(/\s+$/, ''); }
   function showToast(msg, icon){
@@ -1381,66 +1343,297 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     return (b / 1024 / 1024).toFixed(1) + 'MB';
   }
 
-  function setImage(file){
+  /* ---------- 코멘트에서 아이 이름 · 보호자 이름 읽기 ---------- */
+  var BAD_NAME = /^(감소|증가|정상|이상|없음|유지|처방|검사|확인|필요|개선|악화|진행|반복|보호자|반려동물|반려견|반려묘|아이|환자|이름|결과|치료|수술|약물|주의|권장|관리|내원|재진|사진|동영상)$/;
+
+  function isGuardian(s){ return /^[가-힣]{2,4}$/.test(s) && !BAD_NAME.test(s); }
+  function isPet(s){
+    if (!s || BAD_NAME.test(s)) return false;
+    return /^[가-힣]{1,8}$/.test(s) || /^[A-Z][A-Za-z]{1,10}$/.test(s);
+  }
+  function tidyName(s){
+    return (s || '')
+      .replace(/^[\s\[\(<"'“”·・,]+|[\s\]\)>"'“”,.]+$/g, '')
+      .replace(/\s*(님|보호자|환자)$/, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  function parseNames(text){
+    var t = (text || '').replace(/\u00a0/g, ' ');
+    var pet = '', guardian = '', m, p, g;
+
+    /* ① 릴리 ( 이원정 님 ) · 몽이 ( 김주원님 ) · 릴리(이원정) */
+    m = t.match(/([가-힣A-Za-z0-9]{1,12})\s*\(\s*([가-힣]{2,4})\s*(?:님)?\s*\)/);
+    if (m){
+      p = tidyName(m[1]); g = tidyName(m[2]);
+      if (isPet(p) && isGuardian(g)){ pet = p; guardian = g; }
+    }
+    /* ② 릴리/이원정 · 릴리 · 이원정 */
+    if (!pet){
+      m = t.match(/([가-힣A-Za-z0-9]{1,12})\s*[/·・]\s*([가-힣]{2,4})(?![가-힣])/);
+      if (m){
+        p = tidyName(m[1]); g = tidyName(m[2]);
+        if (isPet(p) && isGuardian(g)){ pet = p; guardian = g; }
+      }
+    }
+    /* ③ 보호자: 이원정 */
+    if (!guardian){
+      m = t.match(/보호자\s*[:：\-]\s*([가-힣]{2,4})/);
+      if (m && isGuardian(tidyName(m[1]))) guardian = tidyName(m[1]);
+    }
+    /* ④ 환자: 릴리 · 아이 이름: 릴리 */
+    if (!pet){
+      m = t.match(/(?:환자|아이|반려동물|반려견|반려묘)\s*(?:이름)?\s*[:：]\s*([가-힣A-Za-z0-9]{1,12})/);
+      if (m && isPet(tidyName(m[1]))) pet = tidyName(m[1]);
+    }
+    /* ⑤ 이원정 보호자 */
+    if (!guardian){
+      m = t.match(/([가-힣]{2,4})\s*보호자(?:님)?/);
+      if (m && isGuardian(tidyName(m[1]))) guardian = tidyName(m[1]);
+    }
+    return { pet: pet, guardian: guardian };
+  }
+
+  /* ---------- 카톡 대화 내보내기(.txt) 읽기 ---------- */
+  var DATE_RE = /^(?:-{3,}\s*)?(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일\s*[월화수목금토일]?요일?(?:\s*-{3,})?\s*$/;
+  var MSG_RE  = /^\[(.+?)\]\s*\[(오전|오후)\s*(\d{1,2}):(\d{2})\]\s?([\s\S]*)$/;
+
+  function parseKakao(text){
+    var lines = (text || '').split(/\r\n|\r|\n/);
+    var dates = [], msgs = [], buf = null, curDate = -1, i, L, dm, mm;
+
+    for (i = 0; i < lines.length; i++){
+      L = lines[i];
+      dm = L.match(DATE_RE);
+      if (dm){
+        if (buf){ msgs.push(buf); buf = null; }
+        dates.push({ label: dm[1] + '년 ' + dm[2] + '월 ' + dm[3] + '일' });
+        curDate = dates.length - 1;
+        continue;
+      }
+      mm = L.match(MSG_RE);
+      if (mm){
+        if (buf) msgs.push(buf);
+        buf = { d: curDate, sender: mm[1].trim(), time: mm[3] + ':' + mm[4], text: mm[5] };
+        continue;
+      }
+      if (buf) buf.text += '\n' + L;
+    }
+    if (buf) msgs.push(buf);
+    return { dates: dates, msgs: msgs };
+  }
+
+  function isMediaNote(t){
+    t = (t || '').replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '');
+    if (!t) return true;
+    if (/^(사진|동영상|이모티콘|파일\s*:|삭제된 메시지|메시지가 삭제)/.test(t)) return true;
+    if (/(사진|동영상)\s*\d*\s*장?$/.test(t) && t.length <= 24) return true;
+    if (/^https?:\/\//.test(t)) return true;
+    return false;
+  }
+
+  /* 마지막 날짜의 원장님 코멘트만 뽑아 아이별로 묶는다 */
+  function buildEntries(parsed, anySender){
+    var out = [], byKey = {};
+    if (!parsed.dates.length) return out;
+    var last = parsed.dates.length - 1;
+    var list = parsed.msgs.filter(function(m){ return m.d === last; });
+    var cur = null, chain = false;
+
+    list.forEach(function(m){
+      var txt = (m.text || '').replace(/\u00a0/g, ' ').replace(/\s+$/, '');
+      if (!txt) return;
+      var first = txt.split('\n')[0].replace(/\s+$/, '');
+      var vet = anySender || m.sender.indexOf('원장') >= 0;
+
+      if (!vet){ chain = false; return; }
+      if (isMediaNote(txt)){ chain = false; return; }
+
+      var nm = parseNames(first);
+      var header = nm.pet && first.length <= 40 &&
+                   (txt.indexOf('(') >= 0 || first.indexOf('님') >= 0 || first.indexOf('보호자') >= 0);
+
+      if (header){
+        var key = nm.pet + '|' + nm.guardian;
+        var body = txt.split('\n').slice(1).join('\n').replace(/^\s+|\s+$/g, '');
+        var e = byKey[key];
+        if (!e){
+          e = { pet: nm.pet, guardian: nm.guardian, bodies: [] };
+          byKey[key] = e; out.push(e);
+        }
+        if (body) e.bodies.push(body);
+        cur = e; chain = true;
+        return;
+      }
+      /* 바로 뒤에 이어 붙는 원장님 코멘트("연고는 1일 1회", "폴 최근 …") */
+      if (cur && chain && txt.length <= 150){
+        var b = txt;
+        if (cur.pet && b.indexOf(cur.pet) === 0){
+          b = b.slice(cur.pet.length).replace(/^[은는이가의,\s]+/, '');
+        }
+        if (b) cur.bodies.push(b);
+        return;
+      }
+      chain = false;
+    });
+
+    return out.map(function(e){
+      var body = e.bodies.join('\n\n')
+        .replace(/[ \t]+\n/g, '\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .replace(/^[ \t]+|[ \t]+$/g, '');
+      return { pet: e.pet, guardian: e.guardian, body: body };
+    }).filter(function(e){ return e.body.length > 1; });
+  }
+
+  /* ---------- 파일 읽기 ---------- */
+  function decodeText(buf){
+    var u8 = new Uint8Array(buf), s = '';
+    try { s = new TextDecoder('utf-8').decode(u8); } catch(e){ s = ''; }
+    if (!s || s.indexOf('\uFFFD') >= 0){
+      try {
+        var alt = new TextDecoder('euc-kr').decode(u8);
+        if (alt && alt.indexOf('\uFFFD') < 0) s = alt;
+      } catch(e){}
+    }
+    return (s || '').replace(/^\uFEFF/, '');
+  }
+
+  function setFile(file){
     if (!file) return;
-    if (!/^image\//.test(file.type || '')){
-      showToast('이미지 파일만 첨부할 수 있어요.', '⚠️');
+    var nm = (file.name || '').toLowerCase();
+    if (!/\.(txt|csv|md|text|log|tsv)$/.test(nm) && !/^text\//.test(file.type || '')){
+      showToast('텍스트 파일(.txt · .csv · .md)만 올릴 수 있어요.', '⚠️');
       return;
     }
-    if (file.size > 15 * 1024 * 1024){
-      showToast('15MB 이하 이미지를 올려 주세요.', '⚠️');
+    if (file.size > 20 * 1024 * 1024){
+      showToast('20MB 이하 파일을 올려 주세요.', '⚠️');
       return;
     }
-    if (imgURL) URL.revokeObjectURL(imgURL);
-    imgFile = file;
-    imgURL = URL.createObjectURL(file);
-    thumbImg.src = imgURL;
-    thumbImg.alt = '첨부한 캡처 이미지 미리보기 — ' + (file.name || '붙여넣은 캡처');
-    thumbName.textContent = file.name || '붙여넣은 캡처';
-    thumbSize.textContent = humanSize(file.size) + ' · 브라우저에만 보관, 서버 전송 없음';
-    thumbCard.hidden = false;
-    drop.hidden = true;
-    syncState();
+    var fr = new FileReader();
+    fr.onload = function(){ onLoaded(file, decodeText(fr.result)); };
+    fr.onerror = function(){ showToast('파일을 읽지 못했어요. 다시 시도해 주세요.', '⚠️'); };
+    fr.readAsArrayBuffer(file);
   }
 
-  function clearImage(){
-    if (imgURL){ URL.revokeObjectURL(imgURL); imgURL = null; }
-    imgFile = null;
-    thumbImg.removeAttribute('src');
-    thumbCard.hidden = true;
-    drop.hidden = false;
-    imgInput.value = '';
+  function onLoaded(file, text){
+    fileName.textContent = file.name || '텍스트 파일';
+    fileMeta.textContent = humanSize(file.size) + ' · 브라우저에서만 읽어요 (서버 전송 없음)';
+    fileCard.hidden = false;
+    fileDrop.hidden = true;
+
+    var parsed = parseKakao(text);
+    var found = buildEntries(parsed, false);
+    if (!found.length) found = buildEntries(parsed, true);   /* 원장님 표기가 없으면 전체에서 */
+
+    entries = found;
+
+    if (found.length > 1){
+      renderEntries(parsed);
+      loadEntry(0, false);
+      showToast('코멘트 ' + found.length + '건을 찾았어요. 만들 아이를 눌러 주세요.', '📄');
+      entryBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    entryBox.hidden = true;
+    if (found.length === 1){
+      loadEntry(0, true);
+      showToast('코멘트를 찾아 2단계에 문구까지 만들었어요.', '✨');
+      return;
+    }
+
+    /* 코멘트 형식이 없는 일반 메모 파일 */
+    ta.value = text.replace(/\r\n?/g, '\n')
+                   .replace(/\n{3,}/g, '\n\n')
+                   .replace(/^\s+/, '')
+                   .slice(0, 4000)
+                   .replace(/\s+$/, '');
+    srcNames = parseNames(ta.value.slice(0, 300));
+    made = false;
     syncState();
+    showToast('파일 내용을 1단계 ②에 넣었어요. 2단계 버튼을 눌러 주세요.', '📄');
   }
 
-  /* ---- 첨부 ---- */
-  drop.addEventListener('click', function(){ imgInput.click(); });
-  drop.addEventListener('keydown', function(e){
+  function renderEntries(parsed){
+    var d = parsed.dates[parsed.dates.length - 1];
+    entryHead.textContent = '📅 ' + d.label + ' 코멘트 ' + entries.length + '건 — 아이를 누르면 2단계에 문구가 바로 만들어져요';
+    var html = '';
+    entries.forEach(function(e, i){
+      html += '<button type="button" class="echip" data-i="' + i + '">' +
+              '<span>' + esc(e.pet || '이름 없음') + '</span>' +
+              (e.guardian ? '<span class="eg">· ' + esc(e.guardian) + '</span>' : '') +
+              '</button>';
+    });
+    entryList.innerHTML = html;
+    entryBox.hidden = false;
+  }
+
+  function markEntry(i){
+    var chips = entryList.querySelectorAll('.echip');
+    Array.prototype.forEach.call(chips, function(b){
+      if (parseInt(b.getAttribute('data-i'), 10) === i) b.classList.add('on');
+      else b.classList.remove('on');
+    });
+  }
+
+  function loadEntry(i, generate){
+    var e = entries[i];
+    if (!e) return;
+    ta.value = e.body;
+    srcNames = { pet: e.pet || '', guardian: e.guardian || '' };
+    markEntry(i);
+    made = !!generate;
+    syncState();
+    if (generate) result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function clearFile(){
+    fileInput.value = '';
+    fileName.textContent = '';
+    fileMeta.textContent = '';
+    fileCard.hidden = true;
+    fileDrop.hidden = false;
+    entryBox.hidden = true;
+    entryList.innerHTML = '';
+    entries = [];
+    srcNames = { pet: '', guardian: '' };
+  }
+
+  /* ---- 파일 올리기 · 끌어다 놓기 ---- */
+  fileDrop.addEventListener('click', function(){ fileInput.click(); });
+  fileDrop.addEventListener('keydown', function(e){
     if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
       e.preventDefault();
-      imgInput.click();
+      fileInput.click();
     }
   });
-  imgInput.addEventListener('change', function(){
-    setImage(imgInput.files && imgInput.files[0]);
+  fileInput.addEventListener('change', function(){
+    setFile(fileInput.files && fileInput.files[0]);
   });
-  thumbDel.addEventListener('click', function(e){
+  fileDel.addEventListener('click', function(e){
     e.stopPropagation();
-    clearImage();
+    clearFile();
+    showToast('올린 파일을 지웠어요.', '🗑️');
+  });
+  entryList.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.echip') : null;
+    if (!btn) return;
+    loadEntry(parseInt(btn.getAttribute('data-i'), 10), true);
+    showToast('이 아이의 문구를 만들었어요. 2단계에서 확인하세요.', '✨');
   });
 
   function stopDrag(e){ e.preventDefault(); e.stopPropagation(); }
 
-  drop.addEventListener('dragenter', function(e){ stopDrag(e); drop.classList.add('over'); });
-  drop.addEventListener('dragover',  function(e){ stopDrag(e); drop.classList.add('over'); });
-  drop.addEventListener('dragleave', function(e){ stopDrag(e); drop.classList.remove('over'); });
-  drop.addEventListener('drop', function(e){
+  fileDrop.addEventListener('dragenter', function(e){ stopDrag(e); fileDrop.classList.add('over'); });
+  fileDrop.addEventListener('dragover',  function(e){ stopDrag(e); fileDrop.classList.add('over'); });
+  fileDrop.addEventListener('dragleave', function(e){ stopDrag(e); fileDrop.classList.remove('over'); });
+  fileDrop.addEventListener('drop', function(e){
     stopDrag(e);
-    drop.classList.remove('over');
+    fileDrop.classList.remove('over');
     var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-    if (f) setImage(f);
+    if (f) setFile(f);
   });
-
   document.addEventListener('dragover', function(e){
     var dt = e.dataTransfer;
     if (!dt) return;
@@ -1449,34 +1642,11 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     if (hasFiles) e.preventDefault();
   });
   document.addEventListener('drop', function(e){
+    if (e.defaultPrevented) return;
     var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-    if (!f || !/^image\//.test(f.type || '')) return;
-    if (e.target === drop || (drop.contains && drop.contains(e.target))) return;
+    if (!f) return;
     e.preventDefault();
-    setImage(f);
-    showToast('이미지를 첨부했어요.', '📷');
-  });
-  document.addEventListener('paste', function(e){
-    var dt = e.clipboardData;
-    if (!dt) return;
-    var file = null, i;
-    var items = dt.items || [];
-    for (i = 0; i < items.length; i++){
-      var it = items[i];
-      if (it.type && it.type.indexOf('image/') === 0){
-        file = it.getAsFile();
-        if (file) break;
-      }
-    }
-    if (!file && dt.files){
-      for (i = 0; i < dt.files.length; i++){
-        if (/^image\//.test(dt.files[i].type || '')){ file = dt.files[i]; break; }
-      }
-    }
-    if (!file) return;
-    e.preventDefault();
-    setImage(file);
-    showToast('클립보드의 캡처를 첨부했어요.', '📷');
+    setFile(f);
   });
 
   /* ===================== 카드 목록 · 증상 매칭 ===================== */
@@ -1670,13 +1840,9 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   }
 
   /* ===================== 요소 ===================== */
-  var nameIn    = document.getElementById('guardianName');
-  var petIn     = document.getElementById('petName');
   var makeBtn   = document.getElementById('makeBtn');
   var pvEmpty   = document.getElementById('pvEmpty');
-  var imgNotice = document.getElementById('imgNotice');
-  var copyAi    = document.getElementById('copyAi');
-  var aiPrompt  = document.getElementById('aiPrompt');
+  var whoami    = document.getElementById('whoami');
   var result    = document.getElementById('result');
   var badge     = document.getElementById('charBadge');
   var pvText    = document.getElementById('previewText');
@@ -1688,46 +1854,20 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   var pickerList= document.getElementById('pickerList');
   var copyMsg   = document.getElementById('copyMsg');
 
-  var AI_HEAD = '첨부한 Petmate Aftercare 전체 콘텐츠 엑셀에서 오늘 진료·증상과 가장 잘 맞는 펫카드 링크 1개를 골라, 아래 원장님 코멘트를 보호자용 카톡 안내문으로 작성해 주세요.\n' +
-                '[작성 규칙]\n' +
-                '1. 전체 공백 포함 300자 미만\n' +
-                '2. 읽기 편하게 문단마다 빈 줄(내려쓰기) 넣기\n' +
-                '3. 앞뒤 큰따옴표 없이 본문만 출력\n' +
-                '4. 마지막에 고른 펫메이트 링크 1개 포함\n' +
-                '---\n';
-
   var manualCard = null;
   var current = null;
   var made = false;
   var lastMsg = '';
-  var cTimer = null, aTimer = null;
+  var cTimer = null;
 
   function esc(s){ return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-
-  function aiText(){
-    var memo = memoText();
-    var tail;
-    if (memo && imgFile) tail = memo + '\n[첨부한 캡처 이미지 속 내용도 함께 읽고 작성해 주세요]';
-    else if (memo)       tail = memo;
-    else                 tail = '[첨부한 캡처 이미지 속 진료 코멘트를 읽고 작성해 주세요]';
-    return AI_HEAD + tail;
-  }
 
   function syncState(){
     var memo = memoText();
     countEl.textContent = (memo ? memo.length : 0) + '자';
     resetBtn.hidden = !memo;
-    aiPrompt.textContent = aiText();
 
-    /* 캡처만 있고 텍스트가 없으면 안내 */
-    imgNotice.hidden = !(imgFile && !memo);
-
-    if (!made){
-      result.hidden = true;
-      pvEmpty.hidden = false;
-      return;
-    }
-    if (!memo){
+    if (!made || !memo){
       result.hidden = true;
       pvEmpty.hidden = false;
       return;
@@ -1735,6 +1875,15 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     pvEmpty.hidden = true;
     result.hidden = false;
     renderResult();
+  }
+
+  /* 코멘트에 적힌 이름 → 파일에서 읽은 이름 순서로 사용 */
+  function resolvedNames(){
+    var n = parseNames(memoText().slice(0, 400));
+    return {
+      pet: n.pet || srcNames.pet || '',
+      guardian: n.guardian || srcNames.guardian || ''
+    };
   }
 
   function emojiFor(sp, card){
@@ -1755,14 +1904,25 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     var body = tidyBody(memo);
     if (body) body = '오늘 진료 결과 안내드립니다.\n' + body;
 
+    var nm = resolvedNames();
     var out = compose({
       body: body,
-      name: nameIn.value.replace(/^\s+|\s+$/g, ''),
-      pet: petIn.value.replace(/^\s+|\s+$/g, ''),
+      name: nm.guardian,
+      pet: nm.pet,
       url: pick.card.u,
       emoji: emojiFor(pick.sp, pick.card)
     });
     lastMsg = out.msg;
+
+    whoami.hidden = false;
+    if (nm.pet || nm.guardian){
+      whoami.className = 'whoami';
+      whoami.textContent = '👤 ' + (nm.guardian ? nm.guardian + ' 보호자님' : '보호자님') +
+        (nm.pet ? ' · 🐾 ' + nm.pet : '') + ' — 이 이름으로 문구를 만들었어요';
+    } else {
+      whoami.className = 'whoami miss';
+      whoami.textContent = '👤 이름을 못 찾아 「보호자님」으로 시작했어요. 코멘트에 「릴리 ( 이원정 님 )」처럼 적으면 자동으로 들어갑니다.';
+    }
 
     pvText.innerHTML = esc(out.msg).split(esc(pick.card.u)).join('<span class="lnk">' + esc(pick.card.u) + '</span>');
     var n = charLen(out.msg);
@@ -1771,7 +1931,6 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
 
     var notes = [];
     if (out.trimmed) notes.push('300자 미만에 맞추려고 뒤쪽 문장을 자동으로 줄였어요.');
-    if (imgFile) notes.push('첨부한 캡처 이미지는 페이지가 직접 읽지 않아, 적어 주신 메모로 문구를 만들었습니다.');
     pvNote.hidden = !notes.length;
     pvNote.textContent = notes.join(' ');
 
@@ -1848,19 +2007,12 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   makeBtn.addEventListener('click', function(){
     var memo = memoText();
     if (!memo){
-      if (imgFile){
-        imgNotice.hidden = false;
-        imgNotice.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        showToast('캡처만으로는 바로 만들 수 없어요. 한 줄만 적거나 AI 지시문을 복사해 주세요.', '📷');
-        return;
-      }
-      showToast('1단계 ②에 진료 코멘트를 먼저 적어 주세요.', '✍️');
+      showToast('1단계 ②에 진료 코멘트를 적거나 텍스트 파일을 올려 주세요.', '✍️');
       ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(function(){ ta.focus(); }, 380);
       return;
     }
     made = true;
-    imgNotice.hidden = true;
     pvEmpty.hidden = true;
     result.hidden = false;
     renderResult();
@@ -1873,12 +2025,13 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   ta.addEventListener('change', syncState);
   resetBtn.addEventListener('click', function(){
     ta.value = '';
+    srcNames = { pet: '', guardian: '' };
     manualCard = null;
+    made = false;
     syncState();
+    if (entryList) Array.prototype.forEach.call(entryList.querySelectorAll('.echip'), function(b){ b.classList.remove('on'); });
     ta.focus();
   });
-  nameIn.addEventListener('input', function(){ if (made && memoText()) renderResult(); });
-  petIn.addEventListener('input', function(){ if (made && memoText()) renderResult(); });
 
   /* ---- 카드 바꾸기 ---- */
   swapBtn.addEventListener('click', function(){
@@ -1920,22 +2073,6 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
       }, 3200);
     }, function(){
       showToast('자동 복사가 막혔어요. 위 문구를 길게 눌러 복사해 주세요.', '⚠️');
-    });
-  });
-
-  /* ---- AI 지시문 복사 (이미지 첨부용) ---- */
-  copyAi.addEventListener('click', function(){
-    copyText(aiText(), function(){
-      copyAi.textContent = '✅ 복사 완료!';
-      copyAi.classList.add('done');
-      showToast('복사 완료! AI 채팅창에 붙여넣고 캡처 이미지도 함께 올려 주세요.');
-      clearTimeout(aTimer);
-      aTimer = setTimeout(function(){
-        copyAi.textContent = '📋 AI 지시문 복사하기 (이미지 첨부용)';
-        copyAi.classList.remove('done');
-      }, 3600);
-    }, function(){
-      showToast('자동 복사가 막혔어요. 지시문 미리보기를 길게 눌러 복사해 주세요.', '⚠️');
     });
   });
 
