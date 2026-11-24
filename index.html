@@ -2071,6 +2071,10 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
 
   ta.addEventListener('input', function(){ renderInstant(false); });
   ta.addEventListener('change', function(){ renderInstant(false); });
+  var resetBtn = document.getElementById('commentReset');
+  if (resetBtn){
+    resetBtn.addEventListener('click', function(){ setTimeout(function(){ renderInstant(false); }, 0); });
+  }
   nameIn.addEventListener('input', function(){ renderInstant(false); });
   petIn.addEventListener('input', function(){ renderInstant(false); });
 
