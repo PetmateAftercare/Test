@@ -29,6 +29,7 @@
       "main.js",
       "preload.js",
       "package.json",
+      "build/icon.ico",
       "guide/**/*"
     ],
     "asar": true,

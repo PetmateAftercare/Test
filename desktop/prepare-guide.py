@@ -32,8 +32,8 @@ PATCH_LABEL = "데스크톱 앱 빌드 패치"
 REPLACEMENTS = [
     (
         "sheetjs-source",
-        "  var SHEETJS_SRC = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.full.min.js';",
-        "  /* " + PATCH_LABEL + ": 데스크톱은 내장 사본, 웹은 CDN(경로 dist/ 로 정정) */\n"
+        "  var SHEETJS_SRC = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';",
+        "  /* " + PATCH_LABEL + ": 데스크톱은 내장 사본, 웹은 CDN */\n"
         "  var SHEETJS_CDN = '" + SHEETJS_CDN + "';\n"
         "  var SHEETJS_SRC = (typeof window !== 'undefined' && window.__PETMATE_DESKTOP__) ? 'vendor/xlsx.full.min.js' : SHEETJS_CDN;",
     ),
