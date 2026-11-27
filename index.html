@@ -3105,7 +3105,11 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     badge.className = 'cnt-badge' + (n >= 300 ? ' over' : n > 282 ? ' tight' : '');
 
     var notes = [];
-    if (out.trimmed) notes.push('300자 미만에 맞추려고 뒤쪽 문장을 자동으로 줄였어요.');
+    if (out.trimmed){
+      if (out.dropped === 'body') notes.push('300자 미만에 맞추려고 뒤쪽 문장을 자동으로 줄였어요.');
+      else if (out.dropped === 'intro') notes.push('300자에 맞추려고 「오늘 진료 결과 안내드립니다.」 한 줄만 덜어 냈어요. 본문은 그대로예요.');
+      else notes.push('300자에 맞추려고 마무리 인사 한 줄만 덜어 냈어요. 본문은 그대로예요.');
+    }
     if (!hospitalName()) notes.push('1단계 맨 위 「🏥 우리 병원 이름」에 병원 이름을 적으면 문구 첫 줄이 「해피동물병원입니다.」처럼 나갑니다.');
     pvNote.hidden = !notes.length;
     pvNote.textContent = notes.join(' ');
