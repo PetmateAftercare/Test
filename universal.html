@@ -2519,6 +2519,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     [/됄/g, '될'],
     [/됍/g, '됨'],
     [/되여/g, '돼'],
+    [/최복/g, '회복'],
     [/([가-힣])읍니다/g, '$1습니다'],
     /* 할께요 → 할게요 : 어간이 ㄹ받침(할·갈·볼·줄·살·올·들·만들)이거나 ‘를’로 끝날 때만 (아버지께서 같은 존칭은 그대로) */
     [/[가-힣]께(?=요?[\s.,!?]|요?$)/g, function(m){
@@ -2528,10 +2529,21 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     }]
   ];
 
+  /* 검사·처치 이름 뒤에 띄어 쓴 ‘되다·하다’는 붙여 쓴다: ‘회복 되었습니다’ → ‘회복되었습니다’ */
+  var JOIN_NOUNS = ('회복|상승|하락|감소|증가|호전|악화|안정|유지|정상화|발생|진행|확인|판단|생각|관찰|' +
+    '치료|처치|검사|투여|급여|처방|완료|시행|실시|입원|퇴원|수술|마취|접종|중성화|발치|스케일링|' +
+    '배뇨|식욕|활력|통증|부종|출혈|면역|염증');
+  var JOIN_RE = new RegExp('(' + JOIN_NOUNS + ')\\s+(되었|됐|되|하|한|할|해|함|하여|하며|하고|합니다|했습니다)', 'g');
+
   function fixTypos(s){
     if (!s) return '';
     s = s.replace(/\u00a0/g, ' ');
     TYPO_RULES.forEach(function(r){ s = s.replace(r[0], r[1]); });
+    s = s.replace(JOIN_RE, '$1$2');
+    /* ‘수치 이며’ ‘정상 입니다’처럼 띄어 쓴 조사·서술어는 붙인다 */
+    s = s.replace(/([가-힣0-9])\s+(이며|이고|이지만|이라|이라서|입니다|이에요)(?=[\s,.!?~…]|$)/g, '$1$2');
+    /* 검사 약어는 대문자로: alkp → ALKP */
+    s = s.replace(/\b(alkp|alp|alt|ast|bun|sdma|cpl|t4)\b/gi, function(m){ return m.toUpperCase(); });
     return s
       .replace(/[ \t]{2,}/g, ' ')
       .replace(/[ \t]+([,，.。!?~…:;)\]}])/g, '$1')
@@ -2542,6 +2554,181 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
       .replace(/\.{2}/g, '.')
       .replace(/([!?.,])\1{1,}/g, '$1')
       .replace(/[ \t]+$/gm, '');
+  }
+
+  /* ---------- 검사 이름·긴 괄호 설명을 보호자 말로 ---------- */
+  /* 원장님이 괄호로 풀어 쓴 검사 설명은 보호자에게 한눈에 읽히는 이름으로 바꾼다.
+     (없는 내용을 만들지 않고, 원장님이 쓴 괄호 속 말만 근거로 삼는다) */
+  var TEST_WORDS = [
+    [/면역\s*글로[블부]?린\s*(?:\([^)\n]{0,90}\))?/g, '면역력 검사'],
+    [/생화학\s*검사\s*\(([^)\n]{0,90})\)/g, function(m, inner){
+      if (/간/.test(inner) && /신장|콩팥/.test(inner)) return '간·신장 검사';
+      if (/신장|콩팥/.test(inner)) return '신장 검사';
+      if (/간/.test(inner)) return '간 검사';
+      return '혈액 검사';
+    }],
+    [/일반\s*혈액\s*검사|전\s*혈구\s*검사/g, '혈액 검사'],
+    [/요\s*(?:검사|분석)\s*\([^)\n]{0,40}소변[^)\n]{0,20}\)/g, '소변 검사'],
+    [/갑상선\s*(?:호르몬\s*)?검사\s*\([^)\n]{0,40}\)/g, '갑상선 검사'],
+    [/췌장\s*(?:특이\s*)?리파아제\s*\([^)\n]{0,40}\)/g, '췌장 검사']
+  ];
+
+  /* 이름을 모르는 검사라도 “(…를 평가하는 검사)”처럼 긴 설명만 붙어 있으면 설명은 덜어 낸다 */
+  function simplifyTests(s){
+    TEST_WORDS.forEach(function(r){ s = s.replace(r[0], r[1]); });
+    return s.replace(/[ \t]*\(([^()\n]{0,90})\)/g, function(m, inner){
+      var t = inner.replace(/\s+/g, ' ').trim();
+      if (!t) return '';
+      if (t.length >= 10 && /검사|평가|확인|나타내|의미|측정|판단/.test(t)) return '';
+      return m;
+    });
+  }
+
+  /* 짝이 맞지 않는 괄호는 지운다: “…회복되었습니다. )”, “…(검사” */
+  function cleanParens(s){
+    var out = '', stack = [];
+    for (var i = 0; i < s.length; i++){
+      var ch = s.charAt(i);
+      if (ch === '(' || ch === '[') stack.push(ch);
+      else if (ch === ')' || ch === ']'){
+        var open = ch === ')' ? '(' : '[';
+        if (stack.length && stack[stack.length - 1] === open) stack.pop();
+        else if (stack.indexOf(open) >= 0){ while (stack.length && stack.pop() !== open){} }
+        else continue;
+      }
+      out += ch;
+    }
+    if (stack.length){
+      var chars = out.split('');
+      for (var k = chars.length - 1; k >= 0 && stack.length; k--){
+        if (chars[k] === stack[stack.length - 1]){ chars.splice(k, 1); stack.pop(); }
+      }
+      out = chars.join('');
+    }
+    return out.replace(/\(\s*\)/g, '');
+  }
+
+  /* ‘;’ ‘:’ ‘→’로 시작하는 부연 줄은 앞 줄에 이어 붙인다 */
+  function joinContinuation(s){
+    var out = [];
+    String(s || '').split('\n').forEach(function(L){
+      var t = L.trim();
+      var m = t.match(/^[;:→>]\s*/);
+      if (m && out.length && out[out.length - 1].trim()){
+        var add = t.slice(m[0].length).trim();
+        if (!add) return;
+        var prev = out[out.length - 1].replace(/\s+$/, '');
+        if (/[.!?…]$/.test(prev)) prev = prev.slice(0, -1);
+        out[out.length - 1] = prev + ' · ' + add;
+        return;
+      }
+      out.push(L);
+    });
+    return out.join('\n');
+  }
+
+  /* ---------- 보고체 → 보호자용 따뜻한 말투 ---------- */
+  var WARM_PHRASES = [
+    [/시기\s*바랍니다/g, '시면 좋겠어요'],
+    [/정상으로\s*(?:많이\s*)?(?:회복|호전)되었습니다/g, '정상으로 잘 돌아왔어요'],
+    [/많이\s*회복되었습니다/g, '많이 좋아졌어요'],
+    [/많이\s*호전되었습니다/g, '많이 좋아졌어요'],
+    [/회복되었습니다/g, '회복됐어요'],
+    [/호전되었습니다/g, '좋아졌어요'],
+    [/과부하/g, '무리'],
+    [/상승했던/g, '올라갔던'],
+    [/상승했습니다/g, '올라갔어요'],
+    [/증가했습니다/g, '늘었어요'],
+    [/감소했습니다/g, '줄었어요'],
+    [/악화되었습니다/g, '나빠졌어요'],
+    [/이상이?\s*없습니다/g, '이상 없어요'],
+    [/문제가?\s*없습니다/g, '문제 없어요'],
+    [/것으로\s*보입니다/g, '것으로 보여요'],
+    [/정상\s*범위\s*입니다/g, '정상 범위예요'],
+    [/정상입니다/g, '정상이에요']
+  ];
+
+  /* 불규칙 활용 어간 (받침 ㅂ·ㄷ·ㅅ·ㅎ) */
+  var IRREG_STEM = {
+    '춥':'추워요', '덥':'더워요', '쉽':'쉬워요', '어렵':'어려워요', '가깝':'가까워요',
+    '아깝':'아까워요', '무겁':'무거워요', '가볍':'가벼워요', '눕':'누워요', '굽':'구워요',
+    '돕':'도와요', '줍':'주워요', '차갑':'차가워요', '그립':'그리워요',
+    '듣':'들어요', '싣':'실어요', '깨닫':'깨달아요', '묻':'물어요',
+    '낫':'나아요', '잇':'이어요',
+    '그렇':'그래요', '이렇':'이래요', '저렇':'저래요', '어떻':'어때요',
+    '파랗':'파래요', '하얗':'하얘요', '아니':'아니에요',
+    '빠르':'빨라요', '모르':'몰라요', '다르':'달라요', '고르':'골라요', '부르':'불러요',
+    '흐르':'흘러요', '자르':'잘라요', '기르':'길러요', '서두르':'서둘러요', '게으르':'게을러요'
+  };
+  var IRREG_KEYS = Object.keys(IRREG_STEM).sort(function(a, b){ return b.length - a.length; });
+
+  function mkSyl(cs, vi){ return String.fromCharCode(0xAC00 + (cs * 21 + vi) * 28); }
+
+  /* 어간 + ‘-아/어요’. 받침이 있으면 모음 조화, 없으면 줄여 쓴다(가+아→가, 보+아→봐) */
+  function haeyo(stem){
+    if (!stem) return '';
+    var c = stem.charCodeAt(stem.length - 1);
+    if (c < 0xAC00 || c > 0xD7A3) return null;
+    if (/하$/.test(stem)) return stem.slice(0, -1) + '해요';
+    if (/되$/.test(stem)) return stem.slice(0, -1) + '돼요';
+    for (var i = 0; i < IRREG_KEYS.length; i++){
+      var k = IRREG_KEYS[i];
+      if (stem.length >= k.length && stem.slice(stem.length - k.length) === k){
+        return stem.slice(0, stem.length - k.length) + IRREG_STEM[k];
+      }
+    }
+    var jong = (c - 0xAC00) % 28;
+    var vi = Math.floor((c - 0xAC00) / 28) % 21;
+    var cs = Math.floor((c - 0xAC00) / 28 / 21);
+    var head = stem.slice(0, -1);
+    if (jong === 20) return stem + '어요';          /* 갔·났·봤 → 갔어요 (과거형) */
+    if (jong !== 0) return stem + ((vi === 0 || vi === 8) ? '아요' : '어요');
+    if (vi === 0) return stem + '요';                 /* 가 + 아 → 가요 */
+    if (vi === 8) return head + mkSyl(cs, 9) + '요';   /* 보 → 봐요 */
+    if (vi === 13) return head + mkSyl(cs, 14) + '요'; /* 주 → 줘요 */
+    if (vi === 18) return head + mkSyl(cs, 4) + '요';  /* 크 → 커요 */
+    if (vi === 20) return head + mkSyl(cs, 6) + '요';  /* 마시 → 마셔요 */
+    if (vi === 1 || vi === 5 || vi === 4) return stem + '요';
+    return stem + '어요';
+  }
+
+  /* ‘-습니다 / -ㅂ니다’를 ‘-아/어요’로 */
+  function warmEnd(t){
+    if (!/니다$/.test(t)) return t;
+    var out;
+    if (/습니다$/.test(t)){
+      var stem = t.slice(0, -3);
+      if (!stem) return t;
+      if (/되었$/.test(stem)) return stem.slice(0, -2) + '됐어요';
+      out = haeyo(stem);
+    } else {
+      var st = t.slice(0, -2);
+      if (!st) return t;
+      var c = st.charCodeAt(st.length - 1);
+      if (c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 === 17){
+        st = st.slice(0, -1) + String.fromCharCode(c - 17);
+      }
+      out = haeyo(st);
+    }
+    return out || t;
+  }
+
+  function warmSegment(t){
+    var out = t;
+    WARM_PHRASES.forEach(function(r){ out = out.replace(r[0], r[1]); });
+    out = out.replace(/보입니다$/, '보여요');
+    out = out.replace(/(.)\s*입니다$/, function(m, c0){
+      if (c0 >= '가' && c0 <= '힣') return c0 + (hasBatchim(c0) ? '이에요' : '예요');
+      if (/[0-9A-Za-z]/.test(c0)) return c0 + '이에요';
+      return m;
+    });
+    return warmEnd(out);
+  }
+
+  /* ‘검사 · 결과’처럼 ‘ · ’로 이어진 구간은 구간마다 말투를 다듬는다 */
+  function warmChunkEnd(t){
+    if (t.indexOf(' · ') < 0) return warmSegment(t);
+    return t.split(' · ').map(warmSegment).join(' · ');
   }
 
   /* ---------- 수의사 메모체 → 보호자용 말투 ---------- */
@@ -2557,7 +2744,8 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     '예정':'예정이에요', '호전':'호전됐어요', '악화':'악화됐어요',
     '유지':'유지하고 있어요', '관찰':'관찰 중이에요', '안정':'안정적이에요',
     '가능':'가능해요', '불가':'불가해요', '불가능':'불가능해요',
-    '발급':'발급했어요', '안내':'안내드렸어요', '조치':'조치했어요'
+    '발급':'발급했어요', '안내':'안내드렸어요', '조치':'조치했어요',
+    '음성':'음성이에요', '양성':'양성이에요'
   };
   var MEMO_KEYS = Object.keys(MEMO_WORDS).sort(function(a, b){ return b.length - a.length; });
   /* 이미 존댓문으로 끝나는 문장은 그대로 둔다 */
@@ -2607,8 +2795,16 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
         }
       }
     }
+    /* ①-3 딱딱한 보고체(‘~되었습니다·~보입니다’)는 따뜻한 말투로 */
+    var warmed = warmChunkEnd(t);
+    if (warmed !== t) return warmed;
     /* ② 이미 존댓문이면 그대로 */
     if (POLITE_RE.test(t)) return t;
+    if (/아님$/.test(t)){
+      var h = t.slice(0, -2).replace(/\s+$/, '');
+      if (!h) return '아니에요';
+      return h + (hasBatchim(h) ? '이 아니에요' : '가 아니에요');
+    }
     if (/없음$/.test(t)) return t.slice(0, -2) + '없어요';
     if (/있음$/.test(t)) return t.slice(0, -2) + '있어요';
     if (/했음$/.test(t)) return t.slice(0, -2) + '했어요';
@@ -2659,6 +2855,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
 
   /* 한 문장을 다듬어 보호자용 문장으로 */
   function convertSentence(s){
+    s = s.replace(/[;；]/g, ',');
     var tailM = s.match(/([.!?~…]+)$/);
     var tail = tailM ? tailM[1] : '';
     if (tail) s = s.slice(0, s.length - tail.length);
@@ -2717,6 +2914,12 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     /* “( 김민지 님 )”처럼 보호자 이름만 덧댄 괄호는 뺀다 */
     s = s.replace(/\(\s*[가-힣]{2,4}\s*님\s*\)/g, '').replace(/[ \t]{2,}/g, ' ').trim();
     if (!s) return '';
+    s = fixTypos(s);
+    s = simplifyTests(s);
+    s = cleanParens(s);
+    s = joinContinuation(s);
+    /* ‘검사 ; 단백뇨’처럼 이어 쓴 결과는 ‘검사 결과 …’로 읽히게 */
+    s = s.replace(/(검사)\s*[;:]\s*(?=[^\s])/g, '$1 결과 ');
     s = s.split('\n').map(speechifyLine).join('\n');
     s = fixTypos(s);
     s = s.replace(/\n{3,}/g, '\n\n').replace(/^\s+|\s+$/g, '');
@@ -2761,6 +2964,14 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     if (charLen(msg) >= 300){
       msg = head + '\n\n' + pack([body]) + '\n\n' + tail;
       trimmed = true; dropped = 'cheer';
+    }
+    if (charLen(msg) >= 300){
+      var intro = body.replace(/^오늘 진료 결과 안내드립니다\.\s*/, '');
+      if (intro && intro !== body){
+        body = intro;
+        msg = head + '\n\n' + pack([body]) + '\n\n' + tail;
+        trimmed = true; dropped = 'intro';
+      }
     }
     if (charLen(msg) >= 300){
       var room = 299 - charLen(head + '\n\n' + '\n\n' + tail) - 1;

@@ -4,7 +4,7 @@
  *  - 다른 출처(SheetJS CDN 등)와 GET 이외 요청은 가로채지 않음
  */
 var CACHE_PREFIX = 'petmate-aftercare-';
-var CACHE_NAME = CACHE_PREFIX + 'v2';
+var CACHE_NAME = CACHE_PREFIX + 'v3';
 var PRECACHE = [
   './',
   './index.html',
