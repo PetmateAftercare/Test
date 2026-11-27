@@ -620,7 +620,7 @@
       <div class="num">2</div>
       <div>
         <h2>보호자 발송용 문구 만들기</h2>
-        <span class="hint">1단계 ②의 코멘트를 그대로 넣어도 오타·메모체 말투를 다듬고 응원 한 줄까지 넣어 완성됩니다.</span>
+        <span class="hint">1단계 ②의 코멘트를 그대로 넣어도 오타·메모체 말투를 다듬고, 번호 없이 부드러운 한 문단으로 완성됩니다.</span>
       </div>
     </div>
     <div class="step-body">
@@ -669,19 +669,15 @@
 <div class="bubble">안녕하세요, 김민지 보호자님 🐱
 <span id="exHosp">우리들 동물병원입니다. (since 2003)</span>
 
-오늘 진료 결과 안내드립니다.
-누아 심장사상충 예방약 넥스가드 급여했어요. 체중 4.2kg으로 안정적이고 컨디션도 양호해요. 다음 예방접종은 12월 24일 예정이에요.
-앞으로도 한 달에 한 번 꾸준히 챙겨 주세요.
+오늘 누아 진료 결과, 심장사상충 예방약 넥스가드 급여했어요. 체중 4.2kg으로 안정적이고 컨디션도 양호해요.
 
-누아와 오늘도 건강한 하루 보내세요 🍀
+다음 예방접종은 12월 24일 예정이에요. 앞으로도 한 달에 한 번 꾸준히 챙겨 주세요.
 
-궁금하신 점은 언제든 편하게 연락 주세요.
-
-💛 누아에게 도움이 되는 건강 정보도 함께 보내드려요 👇
+💛 누아 건강에 도움 되는 정보도 같이 보내드려요 👇
 <span class="lnk">https://m.pet-mate.net/2k9d7f1</span></div>
         <div class="metaline">
-          <span class="pill">공백 포함 <b>276자</b> / 300자 미만</span>
-          <span class="pill">슬로건·응원 한 줄 포함</span>
+          <span class="pill">공백 포함 <b>220자</b> / 300자 미만</span>
+          <span class="pill">번호 없이 부드러운 문단</span>
           <span class="pill">펫메이트 링크 1개</span>
         </div>
       </div>
@@ -2521,6 +2517,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     [/어떻해요/g, '어떡해요'],
     [/어떻해/g, '어떻게'],
     [/오랫만/g, '오랜만'],
+    [/(이전|지난|작년|예년)\s+보다/g, '$1보다'],
     [/금새/g, '금세'],
     [/역활/g, '역할'],
     [/웬지/g, '왠지'],
@@ -2543,7 +2540,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   /* 검사·처치 이름 뒤에 띄어 쓴 ‘되다·하다’는 붙여 쓴다: ‘회복 되었습니다’ → ‘회복되었습니다’ */
   var JOIN_NOUNS = ('회복|상승|하락|감소|증가|호전|악화|안정|유지|정상화|발생|진행|확인|판단|생각|관찰|' +
     '치료|처치|검사|투여|급여|처방|완료|시행|실시|입원|퇴원|수술|마취|접종|중성화|발치|스케일링|' +
-    '배뇨|식욕|활력|통증|부종|출혈|면역|염증');
+    '배뇨|식욕|활력|통증|부종|출혈|면역|염증|소모|저하|개선|측정');
   var JOIN_RE = new RegExp('(' + JOIN_NOUNS + ')\\s+(되었|됐|되|하|한|할|해|함|하여|하며|하고|합니다|했습니다)', 'g');
 
   function fixTypos(s){
@@ -2597,6 +2594,12 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
 
   /* 짝이 맞지 않는 괄호는 지운다: “…회복되었습니다. )”, “…(검사” */
   function cleanParens(s){
+    /* ‘1) 2)’처럼 줄 첫머리에 붙은 번호표는 괄호로 보지 않는다 */
+    var keeps = [];
+    s = s.replace(/(^|\n)([ \t]*)(\d+)\)/g, function(m, br, sp, n){
+      keeps.push(n + ')');
+      return br + sp + '\u0001' + (keeps.length - 1) + '\u0001';
+    });
     var out = '', stack = [];
     for (var i = 0; i < s.length; i++){
       var ch = s.charAt(i);
@@ -2616,6 +2619,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
       }
       out = chars.join('');
     }
+    out = out.replace(/\u0001(\d+)\u0001/g, function(m, i){ return keeps[+i] || ''; });
     return out.replace(/\(\s*\)/g, '');
   }
 
@@ -2929,8 +2933,8 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     s = simplifyTests(s);
     s = cleanParens(s);
     s = joinContinuation(s);
-    /* ‘검사 ; 단백뇨’처럼 이어 쓴 결과는 ‘검사 결과 …’로 읽히게 */
-    s = s.replace(/(검사)\s*[;:]\s*(?=[^\s])/g, '$1 결과 ');
+    /* ‘검사 ; 단백뇨’처럼 이어 쓴 결과는 ‘검사 · 단백뇨’로 나누어 보호자 말투로 이어 붙인다 */
+    s = s.replace(/(검사)\s*[;:]\s*(?=[^\s])/g, '$1 · ');
     s = s.split('\n').map(speechifyLine).join('\n');
     s = fixTypos(s);
     s = s.replace(/\n{3,}/g, '\n\n').replace(/^\s+|\s+$/g, '');
@@ -2952,43 +2956,238 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
   }
   function charLen(s){ return Array.from(s).length; }
 
-  /* 본문과 마무리 인사 사이에 들어가는 응원 한 줄 */
-  function cheerLine(pet){
-    if (pet) return pet + (hasBatchim(pet) ? '과' : '와') + ' 오늘도 건강한 하루 보내세요 🍀';
-    return '오늘도 아이와 건강한 하루 보내세요 🍀';
+  /* 300자를 넘으면 설명·부연 문장부터 덜어 내고, 그래도 넘으면 뒤를 자른다 */
+  function fitParagraph(text, room){
+    if (charLen(text) <= room) return text;
+    var asides = /(볼 수 있는 변화|가능성이|생각됩니다|수 있습니다|것 같아요|보여요)\.$/;
+    var cut = String(text).split('\n\n').map(function(p){
+      var ss = splitSentences(p);
+      if (ss.length < 2) return p;
+      return ss.filter(function(s, i){ return i === 0 || !asides.test(s.trim()); }).join(' ').trim();
+    }).join('\n\n');
+    if (charLen(cut) > 0 && charLen(cut) < charLen(text)) text = cut;
+    return clipBody(text, room);
+  }
+
+  /* ===== 문단형 조립: 번호 목록을 부드러운 문장으로 이어 붙이기 ===== */
+
+  var ITEM_MARK = /^(?:[•·▶◆◇■□○●★*]|\(?\d+[.)]\)?|[①-⑳])\s*/;
+
+  /* 코멘트를 번호·줄 단위 항목으로 나눈다 */
+  function parseItems(body){
+    var items = [];
+    String(body || '').split('\n').forEach(function(L){
+      var t = L.replace(/^[ \t]+|[ \t]+$/g, '');
+      if (!t) return;
+      var m = t.match(ITEM_MARK), marked = !!m;
+      if (m) t = t.slice(m[0].length).replace(/^[ \t]+/, '');
+      if (!t) return;
+      var prev = items[items.length - 1];
+      if (prev && !marked && !/[.!?…]$/.test(prev.text)){ prev.text += ' ' + t; return; }
+      items.push({ text: t });
+    });
+    return items;
+  }
+
+  /* ‘면역력 검사 · 정상으로 돌아왔어요’처럼 검사 이름과 결과가 ‘ · ’로 이어진 항목을 나눈다 */
+  function splitItemLabel(text){
+    var at = text.indexOf(' · ');
+    if (at > 1){
+      var lab = text.slice(0, at).trim(), rest = text.slice(at + 3).trim();
+      if (lab && rest && lab.length <= 24 && !/[.!?…]$/.test(lab)) return { label: lab, rest: rest };
+    }
+    return { label: '', rest: text };
+  }
+
+  function labelShort(l){
+    return l.replace(/\s*(검사|수치|결과|상태|항목)\s*$/, '').trim() || l;
+  }
+
+  /* 결과 문장 안에 이미 검사 이름이 들어 있으면 이름을 또 붙이지 않는다 */
+  function labelInRest(label, rest){
+    var toks = labelShort(label).split(/[·,\/·\s]+/).filter(function(x){ return x.length > 0; });
+    return toks.some(function(t){ return rest.indexOf(t) >= 0; });
+  }
+
+  var CARE_RE = /(주세요|하세요|권장|권해|예정|필요해요|재검|다음|앞으로|부터|때까지|챙겨|지켜)/;
+  var WARN_RE = /(살짝|조금|약간|다소|경미|높게|낮게|높은 편|수치가 높|수치가 낮|염증|양성|주의|관찰|부어|부었|붓|통증|구토|설사|혈변|혈뇨|기침|가려|탈모|과다|부족|처방|투약)/;
+  var POS_RE = /(정상|좋아졌|회복|괜찮|양호|음성|완료|잘 |순조|없어요|없습니다)/;
+
+  /* 문장이 좋은 소식인지, 살펴볼 점인지, 안내·당부인지 가른다 */
+  function itemTone(s){
+    var t = String(s || '');
+    if (/(이상|문제|탈수|통증|출혈|발열|기침|구토|설사|염증)(은|는|가|이)?\s*(없|아니)/.test(t)) return 'pos';
+    if (CARE_RE.test(t)) return 'care';
+    if (WARN_RE.test(t)) return 'warn';
+    if (POS_RE.test(t)) return 'pos';
+    return 'info';
+  }
+
+  /* 어려운 말·딱딱한 말을 보호자가 바로 읽히는 말로 */
+  var EASY_RULES = [
+    [/정상으로\s*잘\s*(?:돌아왔|회복됐)어요/g, '정상으로 돌아왔어요'],
+    [/항목만\s*/g, ' 수치만 '],
+    [/정상보다\s*(?:조금|약간|다소)\s*높은\s*수치로/g, '정상보다 살짝 높은 편이라'],
+    [/정상보다\s*(?:조금|약간|다소)\s*높은\s*수치(?:이며|이고|예요|입니다)?/g, '정상보다 살짝 높은 편이에요'],
+    [/정상보다\s*(?:조금|약간|다소)\s*높게\s*나왔(?:어요|습니다)/g, '정상보다 살짝 높게 나왔어요'],
+    [/약은\s*현재\s*약\s*/g, '약은 '],
+    [/나머지는\s*(?:모두\s*)?정상으로\s*(?:잘\s*)?돌아왔어요/g, '나머지는 모두 정상이에요'],
+    [/나머지는\s*(?:모두\s*)?정상(?:이에요|입니다)/g, '나머지는 모두 정상이에요'],
+    [/관찰돼요/g, '보여요'],
+    [/정상이며/g, '정상이고'],
+    [/시행했어요/g, '했어요'],
+    [/(스케일링|발치|중성화|예방접종|처치|수술|검사)\s+했어요/g, '$1을 했어요'],
+    [/급여\s*권장해요/g, '급여해 주세요'],
+    [/권장해요/g, '권해드려요'],
+    [/되었어요/g, '됐어요']
+  ];
+
+  function softenClause(s){
+    var t = String(s || '').replace(/\s+/g, ' ').trim();
+    if (!t) return '';
+    EASY_RULES.forEach(function(r){ t = t.replace(r[0], r[1]); });
+    t = t.replace(/\(\s*\)/g, '').replace(/\s{2,}/g, ' ').replace(/\s+([,.!?])/g, '$1').trim();
+    /* ‘…, 나머지는 정상이에요’ — 앞에서 한 말을 되풀이하면 덜어 내고, 새 정보면 문장을 나는다 */
+    if (/나머지는\s*(?:모두\s*)?정상(?:으로\s*(?:돌아왔|이에요|입니다)|이에요|입니까)/.test(t)){
+      var cut = t.split(/,\s*나머지는/)[0];
+      if (cut.indexOf('정상') >= 0) t = cut + '.';
+      else t = cut + '. 나머지는 모두 정상이에요.';
+    }
+    if (t && !/[.!?…]$/.test(t)) t += '.';
+    /* 쉼표로 길게 이어진 문장은 두 마디씩 끊어 읽기 좋게 */
+    if ((t.match(/, /g) || []).length > 1 && !/나머지는/.test(t)){
+      var parts = t.replace(/[.!?]$/, '').split(', ');
+      var groups = [];
+      for (var i = 0; i < parts.length; i += 2) groups.push(parts.slice(i, i + 2).join(', '));
+      t = groups.join('. ') + '.';
+    }
+    return t;
+  }
+
+  /* 두 문장을 ‘-고’로 이어 붙일 수 있으면 그 형태를 돌려준다 */
+  function joinAsGo(s){
+    if (!/\.$/.test(s)) return null;
+    var b = s.slice(0, -1);
+    if (/(이에요|예요)$/.test(b)) return b.replace(/(이에요|예요)$/, '이고');
+    if (/했어요$/.test(b)) return b.replace(/했어요$/, '했고');
+    if (/(았|었|였)어요$/.test(b)) return b.replace(/(았|었|였)어요$/, '$1고');
+    var m = b.match(/([가-힣])(?:어요|아요)$/);
+    if (m && hasBatchim(m[1])) return b.slice(0, -2) + '고';
+    return null;
+  }
+
+  /* ‘간·신장 검사’ + ‘간수치가…’ → ‘간·신장 수치가…’ (검사 이름을 살려 준다) */
+  function widenSubject(label, rest){
+    var l = labelShort(label);
+    if (l.indexOf('·') < 0) return rest;
+    var toks = l.split('·');
+    for (var i = 0; i < toks.length; i++){
+      var t = toks[i].trim();
+      if (t && rest.indexOf(t) === 0 && /^\s*수치/.test(rest.slice(t.length))){
+        return l + ' ' + rest.slice(t.length).replace(/^\s+/, '');
+      }
+    }
+    return rest;
+  }
+
+  /* ‘…것으로 보여요’ → 원인이 가벼우면 안심시키는 말로 */
+  function reassureClause(t){
+    var mild = /(일시적|잠깐|살짝|조금|약간|경미)/.test(t);
+    var m = t.match(/^(.*?(?:었던|았던|던))\s*것으로\s*보여요\.?$/);
+    if (m && mild && !/(심한|심각|위험|큰)/.test(t)) return m[1].replace(/\s+$/, '') + ' 거라 크게 걱정하지 않으셔도 돼요.';
+    return t.replace(/것으로\s*보여요\.?$/, '것 같아요.');
+  }
+
+  /* 정리된 본문을 번호 없이 부드러운 한 문단으로 */
+  function paragraphize(body, pet){
+    var items = parseItems(body);
+    if (!items.length) return '';
+    var all = items.map(function(it){ return it.text; }).join(' ');
+    var clauses = [];
+
+    items.forEach(function(it){
+      var sp = splitItemLabel(it.text);
+      var sents = splitSentences(sp.rest);
+      if (!sents.length) sents = [sp.rest];
+      var hasLab = !!sp.label;
+      var useLab = hasLab && !labelInRest(sp.label, sp.rest);
+      var rest = useLab ? sp.rest : (hasLab ? widenSubject(sp.label, sp.rest) : sp.rest);
+      sents = splitSentences(rest);
+      if (!sents.length) sents = [rest];
+      var first = true;
+      sents.forEach(function(s){
+        var t = softenClause(s);
+        if (!t) return;
+        if (first && useLab){
+          var l = labelShort(sp.label);
+          var p = items.length > 1 ? '도' : (hasBatchim(l) ? '은' : '는');
+          t = l + p + ' ' + t;
+        }
+        first = false;
+        clauses.push({ text: t, tone: itemTone(t) });
+      });
+    });
+    if (!clauses.length) return body;
+
+    var out = [], cur = '', curTone = '', merged = 0, seen = '';
+    clauses.forEach(function(c){
+      var text = c.text;
+      /* 앞에서 이미 ‘정상’을 말했으면 ‘나머지는 정상’은 되풀이하지 않는다 */
+      if (/^나머지는 모두 정상이에요/.test(text) && (seen + cur).indexOf('정상') >= 0) return;
+      if (!cur){ cur = text; curTone = c.tone; merged = 1; seen += text; return; }
+      /* 원인 설명은 앞의 조심스러운 결과에 이어 안심시키는 문장으로 */
+      if (curTone === 'warn' && /(것으로\s*보여요|생기면서|때문|인한|올라갔|올라간)/.test(text)){
+        out.push(cur); cur = reassureClause(text); curTone = 'info'; merged = 1; seen += text; return;
+      }
+      if (c.tone === 'pos' && curTone === 'pos' && merged < 3){
+        var j = joinAsGo(cur);
+        if (j){ cur = j + ' ' + text; merged++; seen += text; return; }
+      }
+      out.push(cur); cur = text; curTone = c.tone; merged = 1; seen += text;
+    });
+    if (cur) out.push(cur);
+
+    /* 첫 문장이 아이 이름으로 시작하면 이름을 한 번만 쓴다 */
+    if (pet && out.length && out[0].indexOf(pet) === 0 && /^[\s,]/.test(out[0].slice(pet.length))){
+      out[0] = out[0].slice(pet.length).replace(/^[\s,]+/, '');
+      if (!out[0]) out.shift();
+    }
+
+    var who = pet ? pet + ' ' : '';
+    var lead = out[0] || '';
+    var open;
+    var firstSymptom = /(구토|설사|기침|절뚝|발열|통증|가려|피부|눈물|콧물|귀|혈변|혈뇨|식욕|활력)/.test(lead);
+    if (/^(예방접종|접종|백신)/.test(lead) || /검사 결과|검사에서|검사상/.test(lead)) open = '오늘 ' + who;
+    else if (/검사|수치|혈액|소변|초음파|엑스레이|방사선/.test(all) && !firstSymptom) open = '오늘 ' + who + '검사 결과, ';
+    else open = '오늘 ' + who + '진료 결과, ';
+
+    var para = out.join(' ');
+    /* 결과와 당부를 두 문단으로 나누면 읽기 쉽다 */
+    var careSent = out.filter(function(s){ return /(주세요|하세요|예정이에요|돼요|권해드려요|괜찮아요)\.$/.test(s); });
+    if (out.length > 2 && careSent.length >= 2){
+      for (var q = 1; q < out.length; q++){
+        if (/(주세요|하세요|예정이에요|돼요|권해드려요|괜찮아요)\.$/.test(out[q])){
+          para = out.slice(0, q).join(' ') + '\n\n' + out.slice(q).join(' ');
+          break;
+        }
+      }
+    }
+    var hasWarn = clauses.some(function(c){ return c.tone === 'warn'; });
+    if (hasWarn && clauses[0].tone === 'pos' && /,\s*$/.test(open)) para = '다행히 ' + para;
+    return open + para;
   }
 
   function compose(o){
     var head = '안녕하세요, ' + (o.name ? o.name + ' 보호자님 ' : '보호자님 ') + o.emoji + '\n' +
                (o.hospital || hospitalLine());
-    var linkLine = '💛 ' + (o.pet ? o.pet + '에게 ' : '') + '도움이 되는 건강 정보도 함께 보내드려요 👇';
+    var linkLine = '💛 ' + (o.pet ? o.pet + ' 건강에' : '건강에') + ' 도움 되는 정보도 같이 보내드려요 👇';
     var tail = linkLine + '\n' + o.url;
-    var closing = '궁금하신 점은 언제든 편하게 연락 주세요.';
-    var cheer = o.cheer || '';            /* 응원 한 줄 */
     var body = o.body, msg, trimmed = false, dropped = '';
 
-    function pack(parts){ return parts.filter(function(p){ return !!p; }).join('\n\n'); }
-
-    msg = head + '\n\n' + pack([body, cheer, closing]) + '\n\n' + tail;
-    if (charLen(msg) >= 300){
-      msg = head + '\n\n' + pack([body, cheer]) + '\n\n' + tail;
-      trimmed = true; dropped = 'closing';
-    }
-    if (charLen(msg) >= 300){
-      msg = head + '\n\n' + pack([body]) + '\n\n' + tail;
-      trimmed = true; dropped = 'cheer';
-    }
-    if (charLen(msg) >= 300){
-      var intro = body.replace(/^오늘 진료 결과 안내드립니다\.\s*/, '');
-      if (intro && intro !== body){
-        body = intro;
-        msg = head + '\n\n' + pack([body]) + '\n\n' + tail;
-        trimmed = true; dropped = 'intro';
-      }
-    }
+    msg = head + '\n\n' + body + '\n\n' + tail;
     if (charLen(msg) >= 300){
       var room = 299 - charLen(head + '\n\n' + '\n\n' + tail) - 1;
-      body = clipBody(body, room);
+      body = fitParagraph(body, room);
       msg = head + '\n\n' + body + '\n\n' + tail;
       trimmed = true; dropped = 'body';
     }
@@ -3074,18 +3273,17 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     }
     current = pick;
 
-    var body = tidyBody(stripNameLines(memo));
-    if (body) body = '오늘 진료 결과 안내드립니다.\n' + body;
-
     var nm = resolvedNames();
+    var body = tidyBody(stripNameLines(memo));
+    if (body) body = paragraphize(body, nm.pet);
+
     var out = compose({
       body: body,
       name: nm.guardian,
       pet: nm.pet,
       url: pick.card.u,
       emoji: emojiFor(pick.sp, pick.card),
-      hospital: hospitalLine(),
-      cheer: cheerLine(nm.pet)
+      hospital: hospitalLine()
     });
     lastMsg = out.msg;
 
@@ -3106,9 +3304,7 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
 
     var notes = [];
     if (out.trimmed){
-      if (out.dropped === 'body') notes.push('300자 미만에 맞추려고 뒤쪽 문장을 자동으로 줄였어요.');
-      else if (out.dropped === 'intro') notes.push('300자에 맞추려고 「오늘 진료 결과 안내드립니다.」 한 줄만 덜어 냈어요. 본문은 그대로예요.');
-      else notes.push('300자에 맞추려고 마무리 인사 한 줄만 덜어 냈어요. 본문은 그대로예요.');
+      notes.push('300자 미만에 맞추려고 뒤쪽 문장을 자동으로 줄였어요.');
     }
     if (!hospitalName()) notes.push('1단계 맨 위 「🏥 우리 병원 이름」에 병원 이름을 적으면 문구 첫 줄이 「해피동물병원입니다.」처럼 나갑니다.');
     pvNote.hidden = !notes.length;
