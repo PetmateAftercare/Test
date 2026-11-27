@@ -2923,6 +2923,8 @@ A girl's best friend 동물매개치료|동물매개치료, 도우미견, 다운
     s = s.split('\n').map(speechifyLine).join('\n');
     s = fixTypos(s);
     s = s.replace(/\n{3,}/g, '\n\n').replace(/^\s+|\s+$/g, '');
+    /* 번호·점 목록 앞의 빈 줄은 지워 목록이 한 덩어리로 읽히게 */
+    s = s.replace(/\n\n(?=\s*(?:\d+[.)]|[•·▶*]|-\s|[①-⑳]))/g, '\n');
     return s;
   }
   function clipBody(b, room){
